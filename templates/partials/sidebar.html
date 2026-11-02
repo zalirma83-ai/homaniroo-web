@@ -1,0 +1,55 @@
+{% load static %}
+<aside class="sidebar" id="main-sidebar" aria-label="منوی اصلی">
+    <div class="sidebar-brand">
+        <a href="{% url 'dashboard:home' %}" class="brand-link" aria-label="صفحه اصلی سامانه">
+            <img src="{% static 'img/brand-mark.svg' %}" alt="" width="42" height="42" draggable="false">
+            <span>{% if request.tenant %}<strong>{{ request.tenant.display_name }}</strong><small>مدیریت مبادلات برق</small>{% else %}<strong>سامانه مدیریت مبادلات برق</strong>{% endif %}</span>
+        </a>
+        <button type="button" class="icon-button sidebar-close" data-sidebar-close aria-label="بستن منو" aria-controls="main-sidebar"><span dir="ltr" aria-hidden="true">›</span></button>
+    </div>
+
+    <nav class="sidebar-nav">
+        <p class="nav-label">نمای کلی</p>
+        <a class="nav-link {% if request.resolver_match.namespace == 'dashboard' and request.resolver_match.url_name == 'home' %}is-active{% endif %}" href="{% url 'dashboard:home' %}">
+            <span class="nav-icon">⌂</span><span>داشبورد</span>
+        </a>
+
+        <p class="nav-label">عملیات</p>
+        <a class="nav-link {% if request.resolver_match.namespace == 'customers' and request.resolver_match.url_name|slice:':6' == 'active' %}is-active{% endif %}" href="{% url 'customers:active_list' %}"><span class="nav-icon">●</span><span>مشترکین فعال</span></a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'customers' and request.resolver_match.url_name == 'provisional_rank_list' %}is-active{% endif %}" href="{% url 'customers:provisional_rank_list' %}"><span class="nav-icon">★</span><span>رتبه‌بندی مشتریان</span></a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'customers' and request.resolver_match.url_name|slice:':11' == 'prospective' %}is-active{% endif %}" href="{% url 'customers:prospective_list' %}"><span class="nav-icon">◎</span><span>مشترکین بالقوه</span></a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'customers' and request.resolver_match.url_name|slice:':7' == 'dormant' %}is-active{% endif %}" href="{% url 'customers:dormant_list' %}"><span class="nav-icon">◌</span><span>مشترکین راکد</span></a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'customers' and request.resolver_match.url_name|slice:':7' == 'partner' %}is-active{% endif %}" href="{% url 'customers:partner_list' %}"><span class="nav-icon">◇</span><span>همکاران</span></a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'contracts' %}is-active{% endif %}" href="{% url 'contracts:list' %}"><span class="nav-icon">▤</span><span>قراردادها</span></a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'interactions' and request.resolver_match.url_name != 'alert_center' %}is-active{% endif %}" href="{% url 'interactions:work_queue' %}"><span class="nav-icon">↗</span><span>تماس و پیگیری</span></a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'interactions' and request.resolver_match.url_name|slice:':5' == 'alert' %}is-active{% endif %}" href="{% url 'interactions:alert_center' %}"><span class="nav-icon">!</span><span>هشدارها</span></a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'energy' %}is-active{% endif %}" href="{% url 'energy:trading_dashboard' %}"><span class="nav-icon">⚡</span><span>خرید و فروش انرژی</span></a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'reports' %}is-active{% endif %}" href="{% url 'reports:center' %}"><span class="nav-icon">▥</span><span>گزارش‌ها</span></a>
+
+        {% if request|has_tenant_roles:"COMPANY_ADMIN" %}
+        <p class="nav-label">مدیریت شرکت</p>
+        <a class="nav-link {% if request.resolver_match.namespace == 'tenants' and request.resolver_match.url_name|slice:':9' == 'operator_' %}is-active{% endif %}" href="{% url 'tenants:operator_list' %}"><span class="nav-icon">♙</span><span>اپراتورهای شرکت</span></a>
+        {% endif %}
+
+        {% if user.is_superuser %}
+        <p class="nav-label">مدیریت سامانه</p>
+        <a class="nav-link {% if request.resolver_match.url_name == 'system_control' %}is-active{% endif %}" href="{% url 'dashboard:system_control' %}">
+            <span class="nav-icon">⚙</span><span>کنترل سامانه</span>
+        </a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'tenants' and request.resolver_match.url_name == 'list' %}is-active{% endif %}" href="{% url 'tenants:list' %}">
+            <span class="nav-icon">▦</span><span>شرکت‌ها</span>
+        </a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'user_list' %}is-active{% endif %}" href="{% url 'tenants:user_list' %}">
+            <span class="nav-icon">♙</span><span>کاربران شرکت‌ها</span>
+        </a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'auditlog' %}is-active{% endif %}" href="{% url 'auditlog:center' %}">
+            <span class="nav-icon">◉</span><span>ممیزی و امنیت</span>
+        </a>
+        {% endif %}
+    </nav>
+
+    <div class="sidebar-footer">
+        <span class="status-dot"></span>
+        <span><strong>سامانه فعال است</strong><small>محیط توسعه</small></span>
+    </div>
+</aside>

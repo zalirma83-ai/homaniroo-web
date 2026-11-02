@@ -1,0 +1,5 @@
+{% if information %}
+{% if compact %}<details><summary>موارد نیازمند رسیدگی — {{ information.label }}</summary>{% else %}<section class="panel profile-section"><div class="panel-header"><h2>موارد نیازمند رسیدگی</h2>{% include "partials/information_badges.html" with information=information only %}</div>{% endif %}
+{% if information.issues %}<ul>{% for problem in information.issues %}<li>{% if problem.location %}<strong>{{ problem.location|fa_number }}:</strong> {% endif %}<span class="badge badge-muted">{% if problem.kind == 'INCOMPLETE' %}نیازمند تکمیل{% else %}نیازمند بررسی{% endif %}</span> {{ problem.message }}{% if problem.impact %}<br><small class="muted">{{ problem.impact }}</small>{% endif %}</li>{% endfor %}</ul>{% else %}<p class="muted">{{ information.explanation }}</p>{% endif %}
+{% if compact %}</details>{% else %}</section>{% endif %}
+{% endif %}

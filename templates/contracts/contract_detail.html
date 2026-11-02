@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}جزئیات قرارداد{% endblock %}
+{% block page_eyebrow %}پرونده قرارداد {{ row.direction_label }}{% endblock %}
+{% block page_title %}{{ row.display_number }}{% endblock %}
+{% block page_description %}<p class="page-subtitle">شناسه داخلی {{ contract.contract_id|fa_number }} ـ {{ row.party_name }}</p>{% endblock %}
+{% block page_actions %}<a class="button button-secondary" href="{% url 'contracts:list' %}">بازگشت به قراردادها</a>{% if row.customer %}<a class="button button-primary" href="{% url 'customers:customer_profile' row.customer.tenant_customer_id %}">پرونده مشتری</a>{% endif %}{% endblock %}
+{% block content %}
+{% if row.customer %}{% include "partials/ownership_editor.html" with unit=row.customer.industrial_unit ownership=row.customer.ownership %}{% endif %}
+
+<section class="contract-detail-summary">
+    <article><span>جهت قرارداد</span><strong>{{ row.direction_label }}</strong></article>
+    <article><span>طرف قرارداد</span><strong>{{ row.party_name }}</strong></article>
+    <article><span>وضعیت زمانی</span><strong>{{ row.lifecycle_label }}</strong></article>
+    <article><span>ردیف‌های انرژی</span><strong>{{ row.lines|length|fa_number }}</strong></article>
+</section>
+<section class="panel contract-overview-panel">
+    <div class="profile-section-heading"><div><p class="section-kicker">مشخصات پایه</p><h2>اطلاعات قرارداد و تحویل</h2></div><div><span class="badge {% if contract.contract_direction == 'SALE' %}badge-success{% else %}badge-info{% endif %}">{{ row.direction_label }}</span> </div></div>
+    {% if duplicate_count > 1 %}<p class="muted">شماره قرارداد در {{ duplicate_count|fa_number }} رکورد این شرکت تکرار شده است؛ شناسه داخلی ملاک تفکیک است.</p>{% endif %}
+    <dl class="contract-detail-grid">
+        <div><dt>شماره قرارداد</dt><dd>{{ contract.contract_number|default:"ثبت نشده" }}</dd></div><div><dt>مرجع خارجی</dt><dd>{{ contract.external_reference|default:"ثبت نشده" }}</dd></div>
+        <div><dt>نوع معامله</dt><dd>{{ row.transaction_label }}</dd></div><div><dt>وضعیت رکورد</dt><dd>{{ row.status_label|ui_label }}</dd></div>
+        <div><dt>شروع قرارداد</dt><dd>{{ row.start_display|default:"ثبت نشده"|fa_number }}</dd></div><div><dt>پایان قرارداد</dt><dd>{{ row.end_display|default:"ثبت نشده"|fa_number }}</dd></div>
+        <div><dt>شروع تحویل</dt><dd>{{ row.delivery_start_display|default:"ثبت نشده"|fa_number }}</dd></div><div><dt>پایان تحویل</dt><dd>{{ row.delivery_end_display|default:"ثبت نشده"|fa_number }}</dd></div>
+        <div><dt>روز پرداخت</dt><dd>{{ contract.payment_day|default:"ثبت نشده"|fa_number }}</dd></div>{# Source priority retained in storage; not a user-facing information status. #}
+        <div class="contract-detail-wide"><dt>شرایط صورتحساب</dt><dd>{{ contract.billing_terms|default:"ثبت نشده" }}</dd></div>
+    </dl>
+</section>
+<section class="active-contract-list contract-detail-lines">
+{% for line in row.lines %}<article class="panel active-contract-card">
+    <header class="active-contract-header"><div><p class="section-kicker">ردیف انرژی {{ forloop.counter|fa_number }}</p><h2>{{ line.item.energy_type.energy_type_name_fa|ui_label }} ـ {{ line.item.load_band.load_band_name_fa }}</h2></div></header>
+    <div class="table-wrap"><table class="contract-line-detail-table"><thead><tr><th>حجم</th><th>نرخ پایه</th><th>نرخ اصلاح‌شده</th><th>نرخ ماهانه</th><th>مبلغ</th><th>اعتبار واحد حجم</th></tr></thead><tbody><tr>
+        <td>{% if line.item.contracted_volume is not None %}{{ line.item.contracted_volume|floatformat:"-6g"|fa_number }} {{ line.item.volume_unit }}{% else %}<span class="muted">ثبت نشده</span>{% endif %}</td>
+        <td>{% include "partials/rate_value.html" with rate_value=line.item.base_rate only %}</td>
+        <td>{% include "partials/rate_value.html" with rate_value=line.item.corrected_rate only %}</td>
+        <td>{% include "partials/rate_value.html" with rate_value=line.item.monthly_rate only %}</td>
+        <td>{% if line.item.amount_value is not None %}{{ line.item.amount_value|floatformat:"-2g"|fa_number }} {% if line.item.amount_unit != 'UNKNOWN' %}{{ line.item.amount_unit }}{% endif %}{% else %}<span class="muted">ثبت نشده</span>{% endif %}</td>
+        <td><span class="badge badge-muted">واحد ثبت‌شده: {{ line.item.volume_unit|default:"نامشخص" }}</span></td>
+    </tr></tbody></table></div>
+    <div class="contract-monthly-section"><h3>مقادیر ماهانه</h3>{% if line.monthly_quantities %}<div class="monthly-quantity-grid contract-monthly-grid">{% for quantity in line.monthly_quantities %}<span><b>{{ quantity.period_jalali|fa_number }}</b><small>{{ quantity.quantity_value|floatformat:"-6g"|fa_number }} {{ quantity.quantity_unit }}</small></span>{% endfor %}</div>{% else %}<p class="panel-empty">مقدار ماهانه‌ای برای این ردیف ثبت نشده است.</p>{% endif %}</div>
+</article>{% empty %}<section class="panel"><p class="panel-empty">ردیف انرژی برای این قرارداد ثبت نشده است.</p></section>{% endfor %}
+</section>
+{% endblock %}

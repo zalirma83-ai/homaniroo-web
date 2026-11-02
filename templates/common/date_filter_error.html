@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}اصلاح بازه تاریخ{% endblock %}
+{% block page_title %}اصلاح بازه تاریخ{% endblock %}
+{% block content %}
+<section class="panel form-panel">
+    <div class="alert alert-error" role="alert"><div><strong>بازه تاریخ معتبر نیست.</strong><ul>{% for error in date_errors %}<li>{{ error }}</li>{% endfor %}</ul><p>برای جلوگیری از نمایش اطلاعات خارج از بازه، تاریخ‌ها را اصلاح کنید.</p></div></div>
+    <form method="get" action="{{ return_url }}">
+        {% for key, value in preserved_filters %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endfor %}
+        <div class="form-group"><label for="date_error_from">از تاریخ</label><input id="date_error_from" type="text" name="{{ from_name }}" value="{{ date_from }}" data-jalali-picker="date" dir="ltr" placeholder="۱۴۰۵/۰۷/۲۵"></div>
+        <div class="form-group"><label for="date_error_to">تا تاریخ</label><input id="date_error_to" type="text" name="{{ to_name }}" value="{{ date_to }}" data-jalali-picker="date" dir="ltr" placeholder="۱۴۰۵/۰۷/۲۵"></div>
+        <div class="form-actions"><button type="submit">اعمال بازه</button><a class="button button-secondary" href="{{ return_url }}">پاک‌کردن بازه</a></div>
+    </form>
+</section>
+{% endblock %}

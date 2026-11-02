@@ -1,0 +1,23 @@
+/* E04: scoped column/card layout only; no theme, font or data changes. */
+.e04-summary-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.e04-summary-three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.dashboard-layout.e04-contract-summary{grid-template-columns:minmax(0,1fr)}
+.e04-active-table .active-col-company{width:28%}
+.e04-active-table .active-col-contact{width:14%}
+.e04-active-table .active-col-phone{width:20%}
+.e04-active-table .active-col-contract{width:13%}
+.e04-active-table .active-col-volume{width:13%}
+.e04-active-table .active-col-action{width:12%}
+.e04-prospective-table .prospective-col-company{width:31%}
+.e04-prospective-table .prospective-col-contact{width:17%}
+.e04-prospective-table .prospective-col-phone{width:21%}
+.e04-prospective-table .prospective-col-last-contact{width:17%}
+.e04-prospective-table .prospective-col-actions{width:14%}
+.e04-contract-table th:nth-child(1){width:18%}
+.e04-contract-table th:nth-child(2){width:23%}
+.e04-contract-table th:nth-child(3){width:14%}
+.e04-contract-table th:nth-child(4){width:17%}
+.e04-contract-table th:nth-child(5){width:16%}
+.e04-contract-table th:nth-child(6){width:12%}
+@media(max-width:800px){.e04-summary-three{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.e04-summary-two,.e04-summary-three{grid-template-columns:minmax(0,1fr)}}

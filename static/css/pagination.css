@@ -1,0 +1,50 @@
+/* Numbered pagination only; uses the site's existing font, colors and buttons. */
+.pagination-numbered {
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.pagination-numbered > .pagination-pages {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    min-width: 0;
+    max-width: 100%;
+}
+.pagination-numbered .pagination-link {
+    min-width: 40px;
+    min-height: 44px;
+    justify-content: center;
+}
+.pagination-numbered .pagination-link.is-current {
+    background: var(--green-800);
+    border-color: var(--green-800);
+    color: #fff;
+}
+.pagination-numbered .pagination-gap {
+    padding-inline: 4px;
+}
+.pagination-numbered .pagination-jump {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    max-width: 100%;
+}
+.pagination-numbered .pagination-jump-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+.pagination-numbered .pagination-jump input[type="number"] {
+    width: 5rem;
+    min-width: 0;
+    min-height: 44px;
+    padding: 7px 8px;
+    text-align: center;
+}
+.pagination-numbered .pagination-jump > button {
+    min-height: 44px;
+}

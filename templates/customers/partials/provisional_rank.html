@@ -1,0 +1,8 @@
+{% if rank %}
+<div class="provisional-rank">
+{% if rank.value %}<span class="badge badge-info">رتبه {{ rank.value|fa_number }} از ۵</span>{% else %}<span class="badge badge-muted">رتبه: اطلاعات ناکافی</span>{% endif %}
+{% if not compact %}<p class="muted">بر اساس {{ rank.contract_count|fa_number }} رکورد قرارداد فروش ثبت‌شده در کل سابقهٔ همین شرکت؛ بدون سنجش حجم خرید یا تأیید اعتبار قراردادها. همه وضعیت‌های ثبت‌شده شمرده می‌شوند.</p>{% endif %}
+{% if rank.missing_number %}<small class="muted">شماره برخی قراردادها ثبت نشده؛ بررسی شود.</small>{% endif %}
+{% if rank.repeated_number %}<br><small class="muted">شماره تکراری قرارداد؛ بررسی شود.</small>{% endif %}
+</div>
+{% endif %}

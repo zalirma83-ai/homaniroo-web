@@ -1,0 +1,1 @@
+{% if rate_value is not None and rate_value != "" %}{{ rate_value|floatformat:"-6g"|fa_number }} <small class="muted">ریال/کیلووات‌ساعت</small>{% else %}<span class="muted">ثبت نشده</span>{% endif %}

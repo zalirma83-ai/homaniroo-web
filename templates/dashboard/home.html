@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'css/e04-presentation.css' %}?v=1">{% endblock %}
+{% block title %}داشبورد مدیریتی{% endblock %}
+{% block page_eyebrow %}نمای کلی شرکت{% endblock %}
+{% block page_title %}داشبورد مدیریتی{% endblock %}
+{% block page_description %}
+<p class="page-subtitle">
+    {% if request.tenant %}{{ request.tenant.display_name }} ـ آخرین وضعیت در تاریخ {{ dashboard_date|jalali_date }}{% else %}برای مشاهده شاخص‌ها یک شرکت را انتخاب کنید.{% endif %}
+</p>
+{% endblock %}
+{% block page_actions %}{% endblock %}
+{% block content %}
+{% if not dashboard_ready %}
+<section class="panel dashboard-empty">
+    <div class="dashboard-empty-icon">◇</div>
+    <h2>شرکت فعال انتخاب نشده است</h2>
+    <p>شاخص‌های داشبورد فقط بر اساس اطلاعات شرکت فعال محاسبه می‌شوند.</p>
+    <p>شرکت موردنظر را از نوار بالای سامانه انتخاب کنید.</p>
+</section>
+{% else %}
+<section class="dashboard-metrics" aria-label="شاخص‌های اصلی">
+    <article class="dashboard-metric">
+        <span class="dashboard-metric-label">مشتریان</span>
+        <strong>{{ customers.total|fa_number }}</strong>
+        <small>{{ customers.active|fa_number }} فعال، {{ customers.leads|fa_number }} مشترک بالقوه</small>
+    </article>
+    <article class="dashboard-metric">
+        <span class="dashboard-metric-label">قراردادهای فعال</span>
+        <strong>{% if contracts.active_display is None %}—{% else %}{{ contracts.active_display|fa_number }}{% endif %}</strong>
+        <small>{% if contracts.dates_available %}از {{ contracts.total|fa_number }} قرارداد{% else %}تاریخ معتبر موجود نیست{% endif %}</small>
+    </article>
+    <article class="dashboard-metric {% if contracts.expiring_display %}dashboard-metric-warning{% endif %}">
+        <span class="dashboard-metric-label">نزدیک پایان</span>
+        <strong>{% if contracts.expiring_display is None %}—{% else %}{{ contracts.expiring_display|fa_number }}{% endif %}</strong>
+        <small>تا ۳۰ روز آینده</small>
+    </article>
+    <article class="dashboard-metric {% if follow_ups.overdue %}dashboard-metric-warning{% endif %}">
+        <span class="dashboard-metric-label">پیگیری‌های امروز</span>
+        <strong>{{ follow_ups.today|fa_number }}</strong>
+        <small>{{ follow_ups.overdue|fa_number }} مورد عقب‌افتاده</small>
+    </article>
+    <article class="dashboard-metric {% if interactions.missed %}dashboard-metric-danger{% endif %}">
+        <span class="dashboard-metric-label">تماس‌های بی‌پاسخ</span>
+        <strong>{{ interactions.missed|fa_number }}</strong>
+        <small>از {{ interactions.total|fa_number }} تماس ثبت‌شده</small>
+    </article>
+    <article class="dashboard-metric {% if alerts.open %}dashboard-metric-warning{% endif %}">
+        <span class="dashboard-metric-label">هشدارهای باز</span>
+        <strong>{{ alerts.open|fa_number }}</strong>
+        <small>هشدارهای عملیاتی باز</small>
+    </article>
+</section>
+
+<div class="dashboard-layout">
+    <section class="panel dashboard-energy-panel">
+        <div class="panel-header">
+            <div><p class="section-kicker">خرید و فروش</p><h2><a class="text-link" href="{% url 'energy:trading_dashboard' %}">وضعیت تراز انرژی</a></h2></div>
+            <span class="status-pill status-pill-{{ energy.balance_tone }}">{{ energy.balance_label }}</span>
+        </div>
+        {% if energy.rows %}
+        <div class="energy-summary">
+            <div><span>حجم خرید</span><strong>{{ energy.purchase_display|fa_number }}</strong><small>مگاوات</small></div>
+            <div><span>حجم فروش</span><strong>{{ energy.sales_display|fa_number }}</strong><small>مگاوات</small></div>
+            <div class="energy-balance-value"><span>{{ energy.balance_label }}</span><strong>{{ energy.balance_display|fa_number }}</strong><small>مگاوات</small></div>
+        </div>
+        <p class="panel-note">محاسبه بر اساس آخرین اجرای تراز و رکوردهای سطح کل قرارداد انجام شده است.</p>
+        {% else %}
+        <div class="panel-empty">برای شرکت فعال اطلاعات تراز انرژی ثبت نشده است.</div>
+        {% endif %}
+    </section>
+
+    <aside class="panel">
+        <div class="panel-header"><div><p class="section-kicker">پیگیری‌ها</p><h2>کارتابل جاری</h2></div></div>
+        <dl class="dashboard-detail-list">
+            <div><dt>پیگیری‌های باز</dt><dd>{{ follow_ups.open|fa_number }}</dd></div>
+            <div><dt>امروز</dt><dd>{{ follow_ups.today|fa_number }}</dd></div>
+            <div><dt>۷ روز آینده</dt><dd>{{ follow_ups.next_seven_days|fa_number }}</dd></div>
+            <div><dt>عقب‌افتاده</dt><dd class="{% if follow_ups.overdue %}text-danger{% endif %}">{{ follow_ups.overdue|fa_number }}</dd></div>
+            <div><dt>بدون تاریخ</dt><dd>{{ follow_ups.missing_date|fa_number }}</dd></div>
+        </dl>
+    </aside>
+</div>
+
+<div class="dashboard-layout dashboard-layout-secondary e04-contract-summary">
+    <section class="panel">
+        <div class="panel-header"><div><p class="section-kicker">قراردادها</p><h2>ترکیب قراردادهای شرکت</h2></div></div>
+        <div class="contract-direction-grid">
+            <div><span>فروش</span><strong>{{ contracts.sales|fa_number }}</strong></div>
+            <div><span>خرید</span><strong>{{ contracts.purchases|fa_number }}</strong></div>
+            <div><span>کل قراردادها</span><strong>{{ contracts.total|fa_number }}</strong></div>
+        </div>
+    </section>
+
+
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_eyebrow %}مدیریت اپراتورهای شرکت{% endblock %}
+{% block page_title %}{{ page_title }}{% endblock %}
+{% block page_description %}<p class="page-subtitle">شرکت فعال: {{ request.tenant.display_name }}. نقش اپراتور ثابت است؛ غیرفعال‌سازی حساب، سوابق را حذف نمی‌کند.</p>{% endblock %}
+{% block content %}<div class="panel form-panel"><form method="post" novalidate>{% csrf_token %}{{ form.as_p }}<div class="form-actions"><button type="submit"{% if edit_blocked %} disabled{% endif %}>ذخیره</button><a class="button button-secondary" href="{% url 'tenants:operator_list' %}">بازگشت</a></div></form></div>{% endblock %}

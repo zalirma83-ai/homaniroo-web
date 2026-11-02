@@ -1,0 +1,20 @@
+/* Scoped follow-up calendar; uses the existing site palette and font. */
+.jalali-picker[hidden]{display:none}
+.jalali-picker{position:fixed;z-index:90;width:min(344px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface,#fff);color:var(--ink-800);box-shadow:var(--shadow-md);font-family:inherit;font-size:.84rem;line-height:1.65}
+.jalali-picker button{font:inherit;cursor:pointer;border:1px solid var(--line);border-radius:8px;background:var(--surface,#fff);color:var(--ink-800);min-height:44px;padding:4px 8px}
+.jalali-picker button:hover{background:var(--green-50)}
+.jalali-picker button:focus-visible,.jalali-picker select:focus-visible{outline:3px solid var(--gold-500);outline-offset:1px}
+.jalali-picker-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px}
+.jalali-picker-heading button{width:44px;font-size:1.3rem}
+.jalali-picker-nav{display:grid;grid-template-columns:44px 1fr 82px 44px;gap:5px;margin-bottom:8px}
+.jalali-picker-nav select,.jalali-picker-time select{min-width:0;font:inherit;padding:6px;min-height:44px}
+.jalali-picker-nav button{padding:0;font-size:1.2rem}
+.jalali-picker-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.jalali-picker-grid button{padding:0;min-width:0;font-variant-numeric:tabular-nums}
+.jalali-picker-grid .is-today{border-color:var(--green-700);font-weight:800}
+.jalali-picker-grid .is-selected{background:var(--green-700);color:#fff;border-color:var(--green-700)}
+.jalali-weekday{text-align:center;color:var(--ink-600);padding:4px 0;font-weight:700}
+.jalali-picker-time{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.jalali-picker-time label{margin:0}
+.jalali-picker-actions{display:flex;gap:6px;justify-content:space-between;margin-top:12px}
+.jalali-picker-actions .jalali-picker-apply{background:var(--green-700);color:#fff;border-color:var(--green-700);font-weight:700;flex:1}

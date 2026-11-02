@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load pagination %}
+{% block title %}ممیزی و امنیت{% endblock %}
+{% block page_eyebrow %}کنترل مرکزی سامانه{% endblock %}
+{% block page_title %}ممیزی فعالیت و امنیت{% endblock %}
+{% block page_description %}<p class="page-subtitle">ردیابی عملیات کاربران، ورودها، نشست‌ها و رخدادهای امنیتی سامانه</p>{% endblock %}
+{% block page_actions %}<a class="button button-secondary" href="{% url 'dashboard:system_control' %}">بازگشت به کنترل سامانه</a>{% endblock %}
+{% block content %}
+<section class="audit-summary-grid">
+    <article><span>کل رویدادها</span><strong>{{ totals.total|fa_number }}</strong><small>{{ totals.today|fa_number }} رویداد امروز؛ {{ totals.http_requests|fa_number }} درخواست HTTP و {{ totals.legacy_http|fa_number }} درخواست قدیمی</small></article>
+    <article><span>رویدادهای موفق</span><strong>{{ totals.successful|fa_number }}</strong><small>نتیجهٔ ثبت‌شده؛ بدون درخواست‌های HTTP</small></article>
+    <article class="audit-summary-danger"><span>رویدادهای ناموفق</span><strong>{{ totals.failed|fa_number }}</strong><small>{{ totals.login|fa_number }} رویداد ورود</small></article>
+    <article><span>تغییرات موفقِ ثبت‌شده</span><strong>{{ totals.mutations|fa_number }}</strong><small>ایجاد، ویرایش، حذف و تغییر وضعیت</small></article>
+</section>
+<section class="panel audit-security-panel">
+    <div class="profile-section-heading"><div><p class="section-kicker">وضعیت امنیتی</p><h2>کاربران، نشست‌ها و ورودها</h2></div><span class="badge badge-success">Axes فعال</span></div>
+    <dl class="audit-security-stats">
+        <div><dt>کاربران فعال</dt><dd>{{ security.users.active|fa_number }} از {{ security.users.total|fa_number }}</dd></div>
+        <div><dt>سوپرادمین</dt><dd>{{ security.users.superusers|fa_number }}</dd></div>
+        <div><dt>بدون سابقه ورود</dt><dd>{{ security.users.never_logged_in|fa_number }}</dd></div>
+        <div><dt>نشست فعال</dt><dd>{{ security.sessions.active|fa_number }}</dd></div>
+        <div><dt>نشست منقضی</dt><dd>{{ security.sessions.expired|fa_number }}</dd></div>
+        <div><dt>ورود ثبت‌شده</dt><dd>{{ security.axes.accesses|fa_number }}</dd></div>
+        <div><dt>تلاش ناموفق فعال</dt><dd>{{ security.axes.attempts|fa_number }}</dd></div>
+        <div><dt>قفل امنیتی</dt><dd>{{ security.axes.locked|fa_number }}</dd></div>
+    </dl>
+</section>
+<section class="panel audit-log-panel">
+    <div class="profile-section-heading"><div><p class="section-kicker">تاریخچه غیرقابل ویرایش</p><h2>رویدادهای ممیزی</h2></div><a class="button button-secondary" href="{% url 'auditlog:export' %}?query={{ filters.query|urlencode }}&action={{ filters.action }}&severity={{ filters.severity }}&success={{ filters.success }}&tenant_id={{ filters.tenant_id }}&date_from={{ filters.date_from }}&date_to={{ filters.date_to }}">خروجی CSV</a></div>
+    <form method="get" class="audit-filter-form">
+        <div><label for="audit_query">جست‌وجو</label><input id="audit_query" name="query" value="{{ filters.query }}" placeholder="کاربر، شرح، موجودیت یا مسیر"></div>
+        <div><label for="audit_action">نوع عملیات</label><select id="audit_action" name="action"><option value="">همه</option>{% for value,label in action_labels.items %}<option value="{{ value }}" {% if filters.action == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+        <div><label for="audit_severity">اهمیت</label><select id="audit_severity" name="severity"><option value="">همه</option>{% for value,label in severity_labels.items %}<option value="{{ value }}" {% if filters.severity == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+        <div><label for="audit_success">نتیجه</label><select id="audit_success" name="success"><option value="">همه</option><option value="yes" {% if filters.success == 'yes' %}selected{% endif %}>موفقِ ثبت‌شده</option><option value="no" {% if filters.success == 'no' %}selected{% endif %}>ناموفقِ ثبت‌شده</option><option value="http_ok" {% if filters.success == 'http_ok' %}selected{% endif %}>HTTP بدون خطا؛ عملیات نامشخص</option><option value="http_error" {% if filters.success == 'http_error' %}selected{% endif %}>خطای HTTP؛ عملیات نامشخص</option><option value="legacy_http" {% if filters.success == 'legacy_http' %}selected{% endif %}>درخواست قدیمی؛ عملیات نامشخص</option></select></div>
+        <div><label for="audit_tenant">شرکت</label><select id="audit_tenant" name="tenant_id"><option value="">همه</option>{% for tenant in tenants %}<option value="{{ tenant.tenant_id }}" {% if filters.tenant_id == tenant.tenant_id|stringformat:'s' %}selected{% endif %}>{{ tenant.display_name }}</option>{% endfor %}</select></div>
+        <div><label for="audit_from">از تاریخ</label><input id="audit_from" type="text" data-jalali-picker="date" dir="ltr" placeholder="۱۴۰۵/۰۷/۲۵" name="date_from" value="{{ filters.date_from }}"></div>
+        <div><label for="audit_to">تا تاریخ</label><input id="audit_to" type="text" data-jalali-picker="date" dir="ltr" placeholder="۱۴۰۵/۰۷/۲۵" name="date_to" value="{{ filters.date_to }}"></div>
+        <div class="lead-filter-actions"><button type="submit">اعمال فیلتر</button><a class="button button-secondary" href="{% url 'auditlog:center' %}">پاک‌کردن</a></div>
+    </form>
+    <div class="table-wrap"><table class="audit-table"><thead><tr><th>زمان</th><th>کاربر و شرکت</th><th>عملیات</th><th>شرح</th><th>مسیر</th><th>نتیجه</th><th>IP</th></tr></thead><tbody>
+    {% for item in page %}<tr><td>{{ item.created_at|jalali_datetime }}</td><td><strong>{{ item.username|default:"سامانه" }}</strong><small>{% if item.tenant_id %}شرکت {{ item.tenant_id|fa_number }}{% else %}سراسری{% endif %}</small></td><td><span class="badge {% if item.severity == 'CRITICAL' %}badge-danger{% elif item.severity == 'IMPORTANT' %}badge-warning{% else %}badge-muted{% endif %}">{{ item.audit_action_label }}</span><small>{{ item.entity_type }}{% if item.entity_id %} #{{ item.entity_id|fa_number }}{% endif %}</small></td><td>{{ item.description|default:"—" }}</td><td><code>{{ item.request_method }} {{ item.request_path }}</code></td><td><span class="badge {{ item.audit_result_class }}">{{ item.audit_result_label }}</span></td><td><code>{{ item.ip_address|default:"—" }}</code></td></tr>
+    {% empty %}<tr><td colspan="7" class="empty-state">هنوز رویدادی مطابق فیلتر انتخاب‌شده ثبت نشده است.</td></tr>{% endfor %}
+    </tbody></table></div>
+    {% numbered_pagination page %}
+</section>
+<div class="notice-box"><strong>معنای نتیجه</strong><p>پاسخ HTTP موفق، ذخیرهٔ واقعی عملیات را ثابت نمی‌کند؛ حتی پاسخ ۲۰۰ یا انتقال ۳۰۲ ممکن است بدون تغییر داده باشد. فقط رویداد صریح، نتیجهٔ ثبت‌شدهٔ همان عملیات را گزارش می‌کند. درخواست‌های قدیمی با قالب ممیزی HTTP نیز بدون تغییر رکورد اصلی، دارای نتیجهٔ عملیات نامشخص نمایش داده می‌شوند.</p><strong>حریم خصوصی و امنیت</strong><p>رمز عبور، محتوای فرم‌ها و داده‌های حساس در لاگ ذخیره نمی‌شوند. رویدادهای ممیزی از رابط سامانه قابل ویرایش یا حذف نیستند.</p></div>
+{% endblock %}

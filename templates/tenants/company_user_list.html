@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}کاربران شرکت‌ها{% endblock %}
+{% block page_eyebrow %}مدیریت دسترسی{% endblock %}
+{% block page_title %}کاربران شرکت‌ها{% endblock %}
+{% block page_description %}<p class="page-subtitle">مدیریت حساب‌های کاربری، نقش‌ها و شرکت تخصیص‌یافته</p>{% endblock %}
+{% block page_actions %}<a class="button button-secondary" href="{% url 'accounts:credential_user_list' %}">تمام حساب‌های ورود</a><a class="button button-primary" href="{% url 'tenants:user_create' %}">+ ایجاد کاربر جدید</a>{% endblock %}
+{% block content %}<section class="panel"><div class="table-wrap"><table><thead><tr><th>نام کامل</th><th>نام کاربری</th><th>شرکت</th><th>نقش</th><th>وضعیت</th><th>عملیات</th></tr></thead><tbody>
+{% for row in rows %}<tr><td><strong>{{ row.membership.core_user.full_name }}</strong></td><td><code>{{ row.membership.core_user.username }}</code></td><td>{{ row.membership.tenant.display_name }}</td><td>{{ row.role.role_name_fa|default:"بدون نقش" }}</td><td>{% if row.membership.core_user.account_status == "ACTIVE" %}<span class="badge badge-success">فعال</span>{% else %}<span class="badge badge-muted">غیرفعال</span>{% endif %}</td><td><a href="{% url 'tenants:user_update' row.membership.core_user_id %}?tenant={{ row.membership.tenant_id }}">ویرایش</a>{% if row.auth_user %} | <a href="{% url 'accounts:user_credentials' row.auth_user.pk %}">نام کاربری و رمز</a>{% endif %}</td></tr>
+{% empty %}<tr><td colspan="6" class="empty-state">هنوز کاربر شرکتی ایجاد نشده است.</td></tr>{% endfor %}
+</tbody></table></div></section>{% endblock %}

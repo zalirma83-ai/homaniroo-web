@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}انتقال به مشترکین راکد{% endblock %}
+{% block page_eyebrow %}تغییر وضعیت مشتری{% endblock %}
+{% block page_title %}انتقال به مشترکین راکد{% endblock %}
+{% block page_description %}<p class="page-subtitle">علت توقف همکاری برای «{{ customer.industrial_unit.official_name }}» ثبت می‌شود.</p>{% endblock %}
+{% block content %}<section class="panel form-panel dormant-action-panel"><div class="notice-box"><strong>این عملیات اطلاعات مشتری را حذف نمی‌کند.</strong><p>قراردادها، تماس‌ها و سوابق پیگیری حفظ می‌شوند و تغییر وضعیت در تاریخچه پرونده ثبت خواهد شد.</p></div><form method="post" novalidate>{% csrf_token %}{{ form.as_p }}<div class="form-actions"><button type="submit" class="button-danger">تأیید انتقال به راکد</button>{% if customer.customer_status == 'ACTIVE' %}<a class="button button-secondary" href="{% url 'customers:active_detail' customer.tenant_customer_id %}">انصراف</a>{% else %}<a class="button button-secondary" href="{% url 'customers:prospective_detail' customer.tenant_customer_id %}">انصراف</a>{% endif %}</div></form></section>{% endblock %}

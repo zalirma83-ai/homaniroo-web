@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% block title %}انتخاب شرکت برای ویرایش کاربر{% endblock %}
+{% block page_title %}انتخاب شرکت برای ویرایش کاربر{% endblock %}
+{% block content %}<section class="panel"><h2>{{ core_user.full_name }}</h2><p>{{ scope_error }}</p>{% for member in memberships %}<p><a class="button button-secondary" href="{% url 'tenants:user_update' core_user.pk %}?tenant={{ member.tenant_id }}">ویرایش در {{ member.tenant.display_name }}</a></p>{% endfor %}<a class="button button-secondary" href="{% url 'tenants:user_list' %}">بازگشت به کاربران شرکت‌ها</a></section>{% endblock %}

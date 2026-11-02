@@ -1,0 +1,46 @@
+<header class="topbar">
+    <div class="topbar-start">
+        <button type="button" class="icon-button menu-toggle" data-sidebar-toggle aria-label="بازکردن منو" aria-controls="main-sidebar" aria-expanded="false"><span dir="ltr" data-sidebar-arrow aria-hidden="true">‹</span></button>
+        <div class="tenant-switcher">
+            <span class="tenant-switcher-label">شرکت فعال</span>
+            <details class="tenant-menu" data-shell-menu>
+                <summary aria-label="انتخاب شرکت">
+                    <span class="tenant-current-name">{% if request.tenant %}{{ request.tenant.display_name }}{% else %}انتخاب شرکت{% endif %}</span>
+                    <span aria-hidden="true">⌄</span>
+                </summary>
+                <div class="tenant-menu-panel">
+                    <form method="post" action="{% url 'tenants:select' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{% url 'dashboard:home' %}">
+                        {% for company in request.tenant_choices %}
+                        <button type="submit" name="tenant" value="{{ company.tenant_id }}"{% if request.tenant.tenant_id == company.tenant_id %} class="is-current" aria-current="true"{% endif %}>{{ company.display_name }}{% if request.tenant.tenant_id == company.tenant_id %}<span aria-hidden="true">✓</span>{% endif %}</button>
+                        {% empty %}
+                        <p class="tenant-menu-empty">شرکت مجازی برای حساب شما موجود نیست.</p>
+                        {% endfor %}
+                    </form>
+                </div>
+            </details>
+        </div>
+    </div>
+    <div class="topbar-end">
+        <details class="user-menu" data-shell-menu>
+            <summary>
+                <span class="user-avatar">{{ user.get_full_name|default:user.username|slice:":1" }}</span>
+                <span class="user-summary"><strong>{{ user.get_full_name|default:user.username }}</strong><small>{{ user.username }}</small></span>
+                <span aria-hidden="true">⌄</span>
+            </summary>
+            <div class="user-menu-panel">
+                {% if user.is_superuser %}
+                <a href="{% url 'accounts:password_change' %}">اطلاعات ورود من</a>
+                <a href="{% url 'accounts:credential_user_list' %}">مدیریت اطلاعات ورود کاربران</a>
+                {% endif %}
+                <a href="{% url 'accounts:sessions' %}">مدیریت نشست‌ها</a>
+                {% if user.is_superuser %}<a href="{% url 'admin:index' %}">مدیریت Django</a>{% endif %}
+                <form method="post" action="{% url 'accounts:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">خروج از سامانه</button>
+                </form>
+            </div>
+        </details>
+    </div>
+</header>

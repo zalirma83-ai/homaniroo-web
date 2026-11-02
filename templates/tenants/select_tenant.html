@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}انتخاب شرکت{% endblock %}
+{% block page_eyebrow %}محیط کاری{% endblock %}
+{% block page_title %}انتخاب شرکت فعال{% endblock %}
+{% block page_description %}<p class="page-subtitle">تمام اطلاعات عملیاتی بر اساس شرکت انتخاب‌شده فیلتر می‌شوند.</p>{% endblock %}
+{% block content %}
+<div class="panel form-panel">
+    <div class="notice-box"><strong>انتخاب شرکت از نوار بالا</strong><p>شرکت موردنظر را از فهرست «انتخاب شرکت» در نوار بالای سامانه انتخاب کنید.</p></div>
+    {% if form.errors %}<div class="form-alert" role="alert">{{ form.errors }}</div>{% endif %}
+</div>
+{% endblock %}

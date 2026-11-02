@@ -1,0 +1,1 @@
+{% if information %}{% if information.incomplete %}<span class="badge badge-warning">نیازمند تکمیل</span>{% endif %}{% if information.review %}<span class="badge badge-warning">نیازمند بررسی</span>{% endif %}{% if information.clear %}<span class="badge badge-success" title="{{ information.explanation }}">بدون هشدار</span>{% endif %}{% endif %}

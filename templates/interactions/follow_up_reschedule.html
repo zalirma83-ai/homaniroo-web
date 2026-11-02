@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}تغییر زمان پیگیری{% endblock %}
+{% block page_eyebrow %}مدیریت پیگیری{% endblock %}
+{% block page_title %}تغییر زمان پیگیری{% endblock %}
+{% block page_description %}<p class="page-subtitle">{{ customer.industrial_unit.official_name }} ـ {{ follow_up.reason|default:"بدون توضیح" }}</p>{% endblock %}
+{% block page_actions %}<a class="button button-secondary" href="{% url 'interactions:work_queue' %}">بازگشت به کارتابل</a>{% endblock %}
+{% block content %}
+<section class="panel form-panel narrow-form-panel">
+    <div class="current-followup-time"><span>زمان فعلی</span><strong>{% if follow_up.due_at %}{{ follow_up.due_at|jalali_datetime }}{% else %}تعیین نشده{% endif %}</strong></div>
+    <form method="post" class="stack-form">{% csrf_token %}{{ form.non_field_errors }}{% for field in form %}<div class="form-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}{{ field.errors }}</div>{% endfor %}<div class="form-actions"><button class="button button-primary" type="submit">ثبت زمان جدید</button><a class="button button-secondary" href="{% url 'interactions:work_queue' %}">انصراف</a></div></form>
+</section>
+{% endblock %}

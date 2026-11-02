@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}تبدیل به مشتری فعال{% endblock %}
+{% block page_eyebrow %}مشترکین بالقوه{% endblock %}
+{% block page_title %}تبدیل به مشتری فعال{% endblock %}
+{% block content %}<section class="result-card result-success"><span class="result-icon">✓</span><h2>تبدیل «{{ customer.industrial_unit.official_name }}» به مشتری فعال</h2><p>پس از تأیید، این پرونده از فهرست مشترکین بالقوه خارج و در مرحله بعد در بخش مشتریان فعال نمایش داده می‌شود. اطلاعات تماس و مذاکرات آن حفظ خواهد شد.</p><div class="form-actions form-actions-center"><form method="post">{% csrf_token %}<button type="submit">تأیید تبدیل</button></form><a class="button button-secondary" href="{% url 'customers:prospective_detail' customer.tenant_customer_id %}">انصراف</a></div></section>{% endblock %}

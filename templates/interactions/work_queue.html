@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load pagination %}
+{% block title %}تماس و پیگیری{% endblock %}
+{% block page_eyebrow %}مدیریت ارتباط با مشتری{% endblock %}
+{% block page_title %}تماس و پیگیری{% endblock %}
+{% block page_description %}<p class="page-subtitle">ثبت تماس‌ها، برنامه‌ریزی پیگیری و مدیریت کارتابل روزانه</p>{% endblock %}
+{% block page_actions %}<a class="button button-primary" href="{% url 'interactions:create' %}">+ ثبت تماس جدید</a>{% endblock %}
+{% block content %}
+<section class="lead-summary-grid">
+    <article><span>کل پیگیری‌های باز</span><strong>{{ stats.open|fa_number }}</strong></article>
+    <article><span>پیگیری‌های عقب‌افتاده</span><strong>{{ stats.overdue|fa_number }}</strong></article>
+    <article><span>پیگیری‌های امروز</span><strong>{{ stats.today|fa_number }}</strong></article>
+    <article><span>تماس‌های بی‌پاسخ</span><strong>{{ interaction_stats.missed|fa_number }}</strong></article>
+</section>
+
+<section class="panel">
+    <form method="get" class="lead-filter-form">
+        <div class="lead-search"><label for="id_q">جست‌وجو</label><input id="id_q" type="search" name="q" value="{{ query }}" placeholder="نام مشتری، مسئول انرژی، تلفن یا دلیل پیگیری"></div>
+        <div><label for="id_scope">وضعیت و زمان پیگیری</label><select id="id_scope" name="scope"><option value="all" {% if scope == 'all' %}selected{% endif %}>همه موارد باز</option><option value="all-records" {% if scope == 'all-records' %}selected{% endif %}>همه موارد</option><option value="overdue" {% if scope == 'overdue' %}selected{% endif %}>عقب‌افتاده</option><option value="today" {% if scope == 'today' %}selected{% endif %}>امروز</option><option value="upcoming" {% if scope == 'upcoming' %}selected{% endif %}>۷ روز آینده</option><option value="without-date" {% if scope == 'without-date' %}selected{% endif %}>بدون تاریخ</option></select></div>
+        <div><label for="id_customer_status">وضعیت مشتری</label><select id="id_customer_status" name="customer_status"><option value="">همه</option><option value="ACTIVE" {% if customer_status == 'ACTIVE' %}selected{% endif %}>مشترک فعال</option><option value="LEAD" {% if customer_status == 'LEAD' %}selected{% endif %}>مشترک بالقوه</option><option value="DORMANT" {% if customer_status == 'DORMANT' %}selected{% endif %}>مشترک راکد</option></select></div>
+        <div><label for="id_order">مرتب‌سازی</label><select id="id_order" name="order"><option value="due" {% if ordering == 'due' %}selected{% endif %}>نزدیک‌ترین زمان</option><option value="due-desc" {% if ordering == 'due-desc' %}selected{% endif %}>دورترین زمان</option><option value="newest" {% if ordering == 'newest' %}selected{% endif %}>جدیدترین ثبت</option></select></div>
+        {% include "partials/ownership_filter.html" %}
+        <div class="lead-filter-actions"><button type="submit">اعمال فیلتر</button><a class="button button-secondary" href="{% url 'interactions:work_queue' %}">پاک‌کردن</a></div>
+    </form>
+    <div class="table-wrap">
+        <table class="prospective-table followup-table">
+            <colgroup><col style="width:15%"><col style="width:20%"><col style="width:17%"><col style="width:20%"><col style="width:10%"><col style="width:18%"></colgroup>
+            <thead><tr><th>زمان پیگیری</th><th>نام مشتری</th><th>اطلاعات تماس</th><th>دلیل پیگیری</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+            <tbody>
+            {% for row in rows %}
+                <tr>
+                    <td>{% if row.item.due_at %}<strong>{{ row.item.due_at|jalali_datetime }}</strong>{% else %}<span class="muted">تعیین نشده</span>{% endif %}</td>
+                    <td>{% if row.customer %}<a class="table-primary-link" href="{% url 'customers:customer_profile' row.customer.tenant_customer_id %}">{{ row.customer.industrial_unit.official_name }}</a><br>{% include "partials/ownership_badge.html" with code=row.customer.ownership_code only %}<small class="muted">شناسه پرونده: {{ row.customer.tenant_customer_id|fa_number }}</small>{% else %}<span class="muted">پرونده در دسترس نیست</span>{% endif %}</td>
+                    <td>{% if row.contact %}<div class="table-contact-numbers"><span><small>مسئول</small><b>{{ row.contact.contact_person|default:"ثبت نشده" }}</b></span><span><small>تماس</small><b dir="ltr">{{ row.contact.mobile_number|default:row.contact.phone_number|default:"—" }}</b></span></div>{% else %}<span class="muted">ثبت نشده</span>{% endif %}</td>
+                    <td>{{ row.item.reason|default:"بدون توضیح" }}</td>
+                    <td><span class="badge badge-{{ row.due_tone }}">{{ row.due_label }}</span></td>
+                    <td>{% if row.can_act %}<div class="table-actions followup-actions">
+                        <form method="post" action="{% url 'interactions:follow_up_action' row.item.follow_up_id %}">{% csrf_token %}<input type="hidden" name="action" value="DONE"><button type="submit" class="button button-small button-primary">انجام شد</button></form>
+                        <a class="button button-small button-secondary" href="{% url 'interactions:follow_up_reschedule' row.item.follow_up_id %}">تغییر زمان</a>
+                        <form method="post" action="{% url 'interactions:follow_up_action' row.item.follow_up_id %}" onsubmit="return confirm('این پیگیری لغو شود؟');">{% csrf_token %}<input type="hidden" name="action" value="CANCELLED"><button type="submit" class="button button-small button-quiet-danger">لغو</button></form>
+                    </div>{% else %}<span class="muted">عملیات فعال ندارد</span>{% endif %}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="6" class="empty-state">پیگیری‌ای مطابق فیلتر انتخاب‌شده پیدا نشد.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% numbered_pagination followup_page page_param="followup_page" aria_label="صفحه‌بندی پیگیری‌ها" %}
+</section>
+
+<section class="panel recent-interaction-panel">
+    <div class="profile-section-heading"><div><p class="section-kicker">سوابق شرکت فعال</p><h2>تماس‌ها و ارتباط‌ها</h2></div><span class="muted">{{ history_page.paginator.count|fa_number }} سابقه</span></div>
+    <div class="table-wrap"><table><thead><tr><th>زمان</th><th>مشتری</th><th>نوع ارتباط</th><th>نتیجه</th><th>اپراتور</th><th>شرح</th></tr></thead><tbody>
+        {% for row in recent_rows %}<tr><td>{{ row.item.interaction_at|jalali_datetime }}</td><td>{% if row.customer %}<a class="table-primary-link" href="{% url 'customers:customer_profile' row.customer.tenant_customer_id %}">{{ row.customer.industrial_unit.official_name }}</a><br>{% include "partials/ownership_badge.html" with code=row.customer.ownership_code only %}{% else %}—{% endif %}</td><td>{{ row.type_label }}</td><td>{{ row.result_label|ui_label }}</td><td>{{ row.item.operator_name_original|default:"نامشخص" }}</td><td>{{ row.item.notes|default:"—"|truncatechars:90 }}</td></tr>{% empty %}<tr><td colspan="6" class="empty-state">تماسی ثبت نشده است.</td></tr>{% endfor %}
+    </tbody></table></div>
+    {% numbered_pagination history_page page_param="history_page" aria_label="صفحه‌بندی سوابق ارتباط‌ها" %}
+</section>
+{% endblock %}

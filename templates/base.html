@@ -1,0 +1,49 @@
+{% load static %}
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#123d35">
+    <title>{% block title %}سامانه مدیریت مبادلات برق{% endblock %} | هما نیرو</title>
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/brand-mark.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}?v=417">
+    <link rel="stylesheet" href="{% static 'css/shell-step1.css' %}?v=1">
+    <link rel="stylesheet" href="{% static 'css/pagination.css' %}?v=1">
+    <link rel="stylesheet" href="{% static 'css/jalali-picker.css' %}?v=1">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="{% if user.is_authenticated %}app-page{% else %}auth-page{% endif %}">
+{% if user.is_authenticated %}
+<div class="app-shell">
+    {% include "partials/sidebar.html" %}
+    <div class="sidebar-backdrop" data-sidebar-backdrop aria-hidden="true"></div>
+    <div class="app-workspace">
+        {% include "partials/topbar.html" %}
+        <main class="app-main" id="main-content">
+            <div class="page-container">
+                <header class="page-heading">
+                    <div>
+                        <p class="page-eyebrow">{% block page_eyebrow %}سامانه مدیریت مبادلات برق{% endblock %}</p>
+                        <h1>{% block page_title %}{% block heading %}داشبورد{% endblock %}{% endblock %}</h1>
+                        {% block page_description %}{% endblock %}
+                    </div>
+                    <div class="page-actions">{% block page_actions %}{% endblock %}</div>
+                </header>
+                {% include "partials/messages.html" %}
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+</div>
+{% else %}
+<main class="auth-shell" id="main-content">
+    {% include "partials/messages.html" %}
+    {% block auth_content %}{% block content_public %}{% endblock %}{% endblock %}
+</main>
+{% endif %}
+<script src="{% static 'js/app.js' %}?v=shell1" defer></script>
+<script src="{% static 'js/jalali-picker.js' %}?v=2" defer></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

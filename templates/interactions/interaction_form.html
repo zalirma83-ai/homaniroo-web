@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}ثبت تماس{% endblock %}
+{% block page_eyebrow %}عملیات ارتباط با مشتری{% endblock %}
+{% block page_title %}ثبت تماس یا ارتباط جدید{% endblock %}
+{% block page_description %}<p class="page-subtitle">نتیجه ارتباط و در صورت نیاز، زمان پیگیری بعدی را ثبت کنید.</p>{% endblock %}
+{% block page_actions %}<a class="button button-secondary" href="{% url 'interactions:work_queue' %}">بازگشت به کارتابل</a>{% endblock %}
+{% block content %}
+<section class="panel form-panel interaction-form-panel">
+    {% if fixed_customer %}<div class="selected-customer-banner"><span>مشتری انتخاب‌شده</span><strong>{{ fixed_customer.industrial_unit.official_name }}</strong><a href="{% url 'customers:customer_profile' fixed_customer.tenant_customer_id %}">مشاهده پرونده</a></div>{% endif %}
+    <form method="post" class="stack-form">{% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}<div class="form-field {% if field.is_hidden %}is-hidden{% endif %}">{% if not field.is_hidden %}<label for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}{{ field }}{% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}{{ field.errors }}</div>{% endfor %}
+        <div class="form-actions"><button class="button button-primary" type="submit">ثبت تماس و پیگیری</button><a class="button button-secondary" href="{% url 'interactions:work_queue' %}">انصراف</a></div>
+    </form>
+</section>
+{% endblock %}

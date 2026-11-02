@@ -1,0 +1,16 @@
+{% load jalali %}
+<section id="excel-source" class="profile-section panel">
+<div class="profile-section-heading"><div><p class="section-kicker">اطلاعات ورودی تأییدشده</p><h2>اطلاعات فایل اکسل</h2></div></div>
+<p class="muted">دیماند قراردادی با واحد تأییدشدهٔ مگاوات نمایش داده می‌شود؛ خرید واقعی یا انرژی مصرفی نیست. زمان ورود، تاریخ تماس یا خرید محسوب نمی‌شود.</p>
+{% for row in excel_source_rows %}
+<article class="interaction-content">
+<h3>{{ row.source_filename }} — ردیف {{ row.source_row|fa_number }}</h3>
+{% if row.source_headers.L.value %}<p class="muted">عنوان اصلی ستون L در فایل: {{ row.source_headers.L.value }}؛ به‌عنوان تاریخ وقوع تماس استفاده نشده است.</p>{% endif %}
+{% if row.billing_account_id %}<p>شناسه حساب قبض: {{ row.billing_account_id|fa_number }}</p>{% else %}<p class="muted">این ردیف شناسه قبض ندارد؛ قبضی از ردیف دیگر به آن نسبت داده نشده است.</p>{% endif %}
+{% if row.demand_mw != None %}<p><strong>دیماند قراردادی: {{ row.demand_mw|fa_number }} مگاوات (MW)</strong></p>{% endif %}
+<div class="table-wrap"><table><thead><tr><th>ستون</th><th>اطلاعات</th><th>مقدار اصلی فایل</th></tr></thead><tbody>
+{% for cell in row.display_cells %}<tr><td>{{ cell.column }}</td><td>{{ cell.label }}</td><td>{% if cell.value == None or cell.value == "" %}—{% else %}{{ cell.value|linebreaksbr }}{% endif %}</td></tr>{% endfor %}
+</tbody></table></div>
+</article>
+{% empty %}<p class="panel-empty">ردیف اکسل ورودی برای این پرونده ثبت نشده است.</p>{% endfor %}
+</section>

@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_eyebrow %}مدیریت کاربران{% endblock %}
+{% block page_title %}{{ page_title }}{% endblock %}
+{% block page_description %}<p class="page-subtitle">مشخصات حساب، شرکت و سطح دسترسی کاربر را تعیین کنید.</p>{% endblock %}
+{% block content %}{% if scope_edit %}<section class="panel"><h2>دامنهٔ ویرایش: {{ edit_tenant.display_name }}</h2><p>نقش فقط در همین شرکت تغییر می‌کند. عضویت‌ها، نقش‌های دیگر و گروه‌های سراسری حفظ می‌شوند.</p><p>نام، ایمیل و وضعیت حساب ورود سراسری‌اند؛ غیرفعال‌کردن حساب، ورود به همهٔ شرکت‌ها را قطع می‌کند.</p>{% if not membership_active %}<p class="muted">عضویت این شرکت غیرفعال است؛ ذخیرهٔ این فرم آن را فعال نمی‌کند.</p>{% endif %}</section>{% endif %}<div class="panel form-panel"><form method="post" novalidate>{% csrf_token %}{{ form.as_p }}<div class="form-actions"><button type="submit"{% if edit_blocked %} disabled{% endif %}>ذخیره کاربر</button><a class="button button-secondary" href="{% url 'tenants:user_list' %}">انصراف</a></div></form></div>{% endblock %}

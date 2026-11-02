@@ -1,0 +1,34 @@
+{
+  "step": "P01-CLOSEOUT",
+  "reference_head": "82b2da332ccbefd56e5e0eaba2c90619e94ef5bd",
+  "database_or_migration_change_by_installer": false,
+  "evidence_filename": "homaniroo_P01_closeout_20261101_202901_421246.json",
+  "evidence_sha256": "59431dfcc224aca0ab95a31e1572de18236f7151100258c17e9f1ab0b1c8cced",
+  "files": {
+    "customers/services.py": {
+      "before_sha256": "7645f44bffa16d87a065b30ddb3768012e3130fd99697234366b317141cb8761",
+      "after_sha256": "b421a1d61bbdae70c9333305f7e8abf89b7f8197307f497d59a7267fb1f1b046"
+    },
+    "customers/views.py": {
+      "before_sha256": "0fd75ae63acdd5f11045727258b96af0e3aeceee2d8c24922e9dea04912eca8b",
+      "after_sha256": "dce5ea1a022e92e685d89aa33d6dbafe8e010316c69f9a589eaf83a54e905c76"
+    },
+    "interactions/alert_services.py": {
+      "before_sha256": "a42f85da8e9c9e4b26d50193484c12de44b3d10516d9e83c4891bba693aa512a",
+      "after_sha256": "e6236c6d1c6b3e3344b6efeae7a9daa08cea9eccc0a4365a3d274ac7f7ea0a5b"
+    },
+    "interactions/scope_locks.py": {
+      "before_sha256": null,
+      "after_sha256": "a00c0466eac0c79d687d9fa39c300d98bc356d000e4f8b25589aa94ffffe63e2"
+    },
+    "common/test_p01_closeout_guardrails.py": {
+      "before_sha256": null,
+      "after_sha256": "519361b4b4b8c15d13657d7816b2b9cfd5a93031197eee9bc83296464ed89690"
+    },
+    "docs/P01_CLOSEOUT_README_FA.md": {
+      "before_sha256": null,
+      "after_sha256": "4586e5e06c8738cb1ff847ed307acbc5a325619b81616218c74fecde34030aaf"
+    }
+  },
+  "acceptance": "Pending actual PostgreSQL tests, source review and user commit output."
+}

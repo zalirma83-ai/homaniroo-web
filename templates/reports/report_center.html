@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}گزارش‌های مدیریتی{% endblock %}
+{% block page_eyebrow %}پایش و تحلیل عملیات{% endblock %}
+{% block page_title %}گزارش‌های مدیریتی{% endblock %}
+{% block page_description %}<p class="page-subtitle">نمای یکپارچه مشتریان، قراردادها، ارتباطات و تراز انرژی شرکت فعال</p>{% endblock %}
+{% block page_actions %}<a class="button button-secondary" href="{% url 'dashboard:home' %}">بازگشت به داشبورد</a>{% endblock %}
+{% block content %}
+<section class="report-filter-panel panel">
+    <div><p class="section-kicker">بازه گزارش عملیاتی</p><h2>فیلتر زمانی تماس، پیگیری و هشدار</h2><p class="muted">این بازه روی تاریخ ثبت‌شدهٔ تماس‌ها، پیگیری‌ها و هشدارها اعمال می‌شود.</p></div>
+    <form method="get" class="report-date-form">
+        <div><label for="report_from">از تاریخ</label><input id="report_from" type="text" data-jalali-picker="date" dir="ltr" placeholder="۱۴۰۵/۰۷/۲۵" name="from" value="{{ filters.date_from }}"></div>
+        <div><label for="report_to">تا تاریخ</label><input id="report_to" type="text" data-jalali-picker="date" dir="ltr" placeholder="۱۴۰۵/۰۷/۲۵" name="to" value="{{ filters.date_to }}"></div>
+        {% include "partials/ownership_filter.html" with ownership_filter=filters.ownership %}
+        <div class="lead-filter-actions"><button type="submit">اعمال بازه</button><a class="button button-secondary" href="{% url 'reports:center' %}">پاک‌کردن</a></div>
+    </form>
+</section>
+
+<section class="report-primary-grid">
+    <article><span>کل مشتریان</span><strong>{{ customers.total|fa_number }}</strong><small>{{ customers.active|fa_number }} فعال · {{ customers.leads|fa_number }} بالقوه</small></article>
+    <article><span>کل قراردادها</span><strong>{{ contracts.total|fa_number }}</strong><small>{{ contracts.sales|fa_number }} فروش · {{ contracts.purchases|fa_number }} خرید</small></article>
+    <article><span>تماس‌های بازه</span><strong>{{ activity.interactions.total|fa_number }}</strong><small>{{ activity.interactions.customers|fa_number }} مشتری دارای ارتباط</small></article>
+    {% if filters.ownership %}<article><span>تراز انرژی</span><strong>—</strong><small>تراز تجمیعی شرکت به مالکیت مشتری قابل تفکیک نیست.</small></article>{% else %}    <article class="{% if energy.totals.balance < 0 %}report-card-danger{% endif %}"><span>{% if energy.totals.balance < 0 %}کسری انرژی{% else %}تراز انرژی{% endif %}</span><strong>{{ energy.totals.balance|floatformat:"-6g"|fa_number }}</strong><small>MW ـ آخرین اجرای اعتبارسنجی</small></article>{% endif %}
+</section>
+
+{# presentation-cleanup: report-center aggregate banner removed; E04 removes page-level quality presentation; stored assessments remain. #}
+
+<section class="report-section-grid">
+    <article class="panel report-domain-card">
+        <div class="panel-header"><div><p class="section-kicker">پوشش بازار</p><h2>مشتریان</h2></div><a class="text-link" href="{% url 'customers:active_list' %}">مشاهده مشتریان</a></div>
+        <dl class="report-metric-list"><div><dt>فعال</dt><dd>{{ customers.active|fa_number }}</dd></div><div><dt>بالقوه</dt><dd>{{ customers.leads|fa_number }}</dd></div><div><dt>دارای اطلاعات تماس</dt><dd>{{ customers.with_contact|fa_number }}</dd></div><div><dt>بدون اطلاعات تماس</dt><dd>{{ customers.without_contact|fa_number }}</dd></div><div><dt>دارای سابقه ارتباط</dt><dd>{{ customers.contacted|fa_number }}</dd></div></dl>
+        {% if request|has_tenant_roles:"COMPANY_ADMIN" %}<a class="button report-export-button" href="{% url 'reports:export_csv' 'customers' %}?ownership={{ filters.ownership }}">خروجی CSV مشتریان</a>{% endif %}
+    </article>
+    <article class="panel report-domain-card">
+        <div class="panel-header"><div><p class="section-kicker">عملکرد تجاری</p><h2>قراردادها</h2></div><a class="text-link" href="{% url 'contracts:list' %}">مشاهده قراردادها</a></div>
+        <dl class="report-metric-list"><div><dt>فروش</dt><dd>{{ contracts.sales|fa_number }}</dd></div><div><dt>خرید</dt><dd>{{ contracts.purchases|fa_number }}</dd></div><div><dt>ردیف انرژی</dt><dd>{{ contracts.lines|fa_number }}</dd></div></dl>
+        {% if request|has_tenant_roles:"COMPANY_ADMIN" %}<a class="button report-export-button" href="{% url 'reports:export_csv' 'contracts' %}?ownership={{ filters.ownership }}">خروجی CSV قراردادها</a>{% endif %}
+    </article>
+    <article class="panel report-domain-card">
+        <div class="panel-header"><div><p class="section-kicker">عملیات روزانه</p><h2>ارتباط و پیگیری</h2></div><a class="text-link" href="{% url 'interactions:work_queue' %}">کارتابل پیگیری</a></div>
+        <dl class="report-metric-list"><div><dt>کل تماس‌ها</dt><dd>{{ activity.interactions.total|fa_number }}</dd></div><div><dt>تماس بی‌پاسخ</dt><dd>{{ activity.interactions.missed|fa_number }}</dd></div><div><dt>پیگیری باز</dt><dd>{{ activity.followups.open|fa_number }}</dd></div><div><dt>پیگیری عقب‌افتاده</dt><dd>{{ activity.followups.overdue|fa_number }}</dd></div><div><dt>پیگیری بدون تاریخ</dt><dd>{{ activity.followups.missing_date|fa_number }}</dd></div><div><dt>پیگیری انجام‌شده</dt><dd>{{ activity.followups.completed|fa_number }}</dd></div></dl>
+        {% if request|has_tenant_roles:"COMPANY_ADMIN" %}<div class="report-export-links"><a href="{% url 'reports:export_csv' 'interactions' %}?from={{ filters.date_from }}&to={{ filters.date_to }}&ownership={{ filters.ownership }}">CSV تماس‌ها</a><a href="{% url 'reports:export_csv' 'followups' %}?from={{ filters.date_from }}&to={{ filters.date_to }}&ownership={{ filters.ownership }}">CSV پیگیری‌ها</a></div>{% endif %}
+    </article>
+    <article class="panel report-domain-card">
+        <div class="panel-header"><div><p class="section-kicker">کنترل ریسک</p><h2>هشدارها</h2></div><a class="text-link" href="{% url 'interactions:alert_center' %}">مرکز هشدار</a></div>
+        <dl class="report-metric-list"><div><dt>کل هشدارها</dt><dd>{{ activity.alerts.total|fa_number }}</dd></div><div><dt>باز</dt><dd>{{ activity.alerts.open|fa_number }}</dd></div><div><dt>مشاهده‌شده</dt><dd>{{ activity.alerts.seen|fa_number }}</dd></div><div><dt>رسیدگی‌شده</dt><dd>{{ activity.alerts.completed|fa_number }}</dd></div><div><dt>فوری</dt><dd>{{ activity.alerts.critical|fa_number }}</dd></div><div><dt>بازه فعال</dt><dd>{% if filters.active %}بله{% else %}همه{% endif %}</dd></div></dl>
+        {% if request|has_tenant_roles:"COMPANY_ADMIN" %}<a class="button report-export-button" href="{% url 'reports:export_csv' 'alerts' %}?from={{ filters.date_from }}&to={{ filters.date_to }}&ownership={{ filters.ownership }}">خروجی CSV هشدارها</a>{% endif %}
+    </article>
+</section>
+
+{% if not filters.ownership %}<section class="panel report-energy-panel">
+    <div class="profile-section-heading"><div><p class="section-kicker">آخرین اجرای اعتبارسنجی</p><h2>تراز انرژی</h2></div><div class="profile-inline-stats"><span>شماره اجرا: <b>{{ energy.latest_run|default:"—"|fa_number }}</b></span><a class="text-link" href="{% url 'energy:trading_dashboard' %}">جزئیات تراز</a></div></div>
+    <dl class="report-energy-summary"><div><dt>خرید</dt><dd>{{ energy.totals.purchase|floatformat:"-6g"|fa_number }} MW</dd></div><div><dt>فروش</dt><dd>{{ energy.totals.sales|floatformat:"-6g"|fa_number }} MW</dd></div><div><dt>تراز</dt><dd>{{ energy.totals.balance|floatformat:"-6g"|fa_number }} MW</dd></div><div><dt>ردیف کسری</dt><dd>{{ energy.totals.deficit|fa_number }}</dd></div></dl>
+    {% if energy.monthly %}<div class="table-wrap"><table><thead><tr><th>دوره</th><th>خرید</th><th>فروش</th><th>تراز</th></tr></thead><tbody>{% for item in energy.monthly %}<tr><td>{{ item.period_jalali|fa_number }}</td><td>{{ item.purchase|floatformat:"-6g"|fa_number }}</td><td>{{ item.sales|floatformat:"-6g"|fa_number }}</td><td>{{ item.balance|floatformat:"-6g"|fa_number }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="panel-empty">داده ماهانه‌ای برای شرکت فعال وجود ندارد.</p>{% endif %}
+        {% if request|has_tenant_roles:"COMPANY_ADMIN" %}<a class="button report-export-button" href="{% url 'reports:export_csv' 'energy' %}">خروجی CSV تراز انرژی</a>{% endif %}
+</section>{% else %}<section class="panel"><p class="muted">فیلتر مالکیت روی مشتریان و رکوردهای متصل به آن‌ها اعمال شده است. برای تراز تجمیعی انرژی، فیلتر مالکیت را پاک کنید.</p></section>{% endif %}
+
+<section class="panel report-status-panel"><div class="profile-section-heading"><div><p class="section-kicker">نتیجه تماس‌ها</p><h2>پرتکرارترین وضعیت‌های ارتباطی</h2></div><span class="muted">براساس بازه انتخاب‌شده</span></div>{% if activity.interaction_statuses %}<div class="report-status-list">{% for item in activity.interaction_statuses %}<div><span>{{ item.interaction_status|default:"بدون وضعیت"|ui_label }}</span><strong>{{ item.total|fa_number }}</strong></div>{% endfor %}</div>{% else %}<p class="panel-empty">در بازه انتخاب‌شده تماسی ثبت نشده است.</p>{% endif %}</section>
+{% endblock %}

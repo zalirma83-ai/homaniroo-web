@@ -1,0 +1,1770 @@
+{
+  "generated_at": "2026-10-04T14:03:54.474596+00:00",
+  "phase": "4.15",
+  "purpose": "Audit trail, access-control and security operations profile",
+  "database_vendor": "postgresql",
+  "application": {
+    "auditlog_installed": true,
+    "axes_installed": true,
+    "debug": true,
+    "session_cookie_age": 28800,
+    "session_expire_at_browser_close": true,
+    "session_save_every_request": true,
+    "csrf_cookie_httponly": true,
+    "csrf_cookie_secure": false,
+    "session_cookie_secure": false,
+    "axes_failure_limit": 5,
+    "axes_cooloff_time": "0:30:00",
+    "authentication_backends": [
+      "axes.backends.AxesStandaloneBackend",
+      "django.contrib.auth.backends.ModelBackend"
+    ]
+  },
+  "tables": {
+    "core.tenants": {
+      "exists": true,
+      "row_count": 2,
+      "columns": [
+        {
+          "column_name": "tenant_id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "tenant_code",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "legal_name",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "display_name",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "status",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": "'ACTIVE'::text"
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": "CURRENT_TIMESTAMP"
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": "CURRENT_TIMESTAMP"
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "22959_23232_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23232_2_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23232_3_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23232_4_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23232_5_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23232_6_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23232_7_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "tenants_status_check",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "tenants_pkey",
+          "constraint_type": "PRIMARY KEY"
+        },
+        {
+          "constraint_name": "tenants_tenant_code_key",
+          "constraint_type": "UNIQUE"
+        }
+      ]
+    },
+    "core.users": {
+      "exists": true,
+      "row_count": 1,
+      "columns": [
+        {
+          "column_name": "user_id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "full_name",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "email",
+          "data_type": "text",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "username",
+          "data_type": "text",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "account_status",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": "'PENDING_SETUP'::text"
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": "CURRENT_TIMESTAMP"
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": "CURRENT_TIMESTAMP"
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "22959_23247_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23247_2_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23247_5_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23247_6_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23247_7_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "users_account_status_check",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "users_pkey",
+          "constraint_type": "PRIMARY KEY"
+        }
+      ]
+    },
+    "core.roles": {
+      "exists": true,
+      "row_count": 4,
+      "columns": [
+        {
+          "column_name": "role_id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "role_code",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "role_name_fa",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "description",
+          "data_type": "text",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "is_system_role",
+          "data_type": "boolean",
+          "is_nullable": "NO",
+          "column_default": "true"
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "22959_23198_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23198_2_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23198_3_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23198_5_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "roles_pkey",
+          "constraint_type": "PRIMARY KEY"
+        },
+        {
+          "constraint_name": "roles_role_code_key",
+          "constraint_type": "UNIQUE"
+        }
+      ]
+    },
+    "core.tenant_users": {
+      "exists": true,
+      "row_count": 0,
+      "columns": [
+        {
+          "column_name": "tenant_user_id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "tenant_id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "is_active",
+          "data_type": "boolean",
+          "is_nullable": "NO",
+          "column_default": "true"
+        },
+        {
+          "column_name": "joined_at",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": "CURRENT_TIMESTAMP"
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "22959_23226_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23226_2_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23226_3_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23226_4_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23226_5_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "tenant_users_tenant_id_fkey",
+          "constraint_type": "FOREIGN KEY"
+        },
+        {
+          "constraint_name": "tenant_users_user_id_fkey",
+          "constraint_type": "FOREIGN KEY"
+        },
+        {
+          "constraint_name": "tenant_users_pkey",
+          "constraint_type": "PRIMARY KEY"
+        },
+        {
+          "constraint_name": "tenant_users_tenant_id_user_id_key",
+          "constraint_type": "UNIQUE"
+        }
+      ]
+    },
+    "core.user_role_assignments": {
+      "exists": true,
+      "row_count": 1,
+      "columns": [
+        {
+          "column_name": "user_role_assignment_id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "role_id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "tenant_id",
+          "data_type": "bigint",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "assigned_at",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": "CURRENT_TIMESTAMP"
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "22959_23242_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23242_2_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23242_3_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23242_5_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "user_role_assignments_role_id_fkey",
+          "constraint_type": "FOREIGN KEY"
+        },
+        {
+          "constraint_name": "user_role_assignments_tenant_id_fkey",
+          "constraint_type": "FOREIGN KEY"
+        },
+        {
+          "constraint_name": "user_role_assignments_user_id_fkey",
+          "constraint_type": "FOREIGN KEY"
+        },
+        {
+          "constraint_name": "user_role_assignments_pkey",
+          "constraint_type": "PRIMARY KEY"
+        },
+        {
+          "constraint_name": "user_role_assignments_user_id_role_id_tenant_id_key",
+          "constraint_type": "UNIQUE"
+        }
+      ]
+    },
+    "core.audit_logs": {
+      "exists": false
+    },
+    "core.customer_status_history": {
+      "exists": true,
+      "row_count": 0,
+      "columns": [
+        {
+          "column_name": "history_id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "tenant_id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "tenant_customer_id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "previous_status",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "new_status",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "reason_code",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "reason_note",
+          "data_type": "text",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "changed_by_user_id",
+          "data_type": "bigint",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "changed_by_name",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "changed_at",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": "CURRENT_TIMESTAMP"
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "22959_58938_10_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_58938_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_58938_2_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_58938_3_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_58938_4_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_58938_5_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_58938_6_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_58938_9_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "customer_status_history_new_status_check",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "customer_status_history_previous_status_check",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "customer_status_history_pkey",
+          "constraint_type": "PRIMARY KEY"
+        }
+      ]
+    },
+    "core.interactions": {
+      "exists": true,
+      "row_count": 244,
+      "columns": [
+        {
+          "column_name": "interaction_id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "tenant_id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "tenant_customer_id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "interaction_type",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": "'CALL'::text"
+        },
+        {
+          "column_name": "interaction_at",
+          "data_type": "timestamp without time zone",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "operator_name_original",
+          "data_type": "text",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "interaction_status",
+          "data_type": "text",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "notes",
+          "data_type": "text",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "source_system",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": "'MVP'::text"
+        },
+        {
+          "column_name": "source_record_id",
+          "data_type": "text",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": "CURRENT_TIMESTAMP"
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "22959_23130_11_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23130_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23130_2_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23130_3_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23130_4_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "22959_23130_9_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "interactions_tenant_customer_id_fkey",
+          "constraint_type": "FOREIGN KEY"
+        },
+        {
+          "constraint_name": "interactions_tenant_id_fkey",
+          "constraint_type": "FOREIGN KEY"
+        },
+        {
+          "constraint_name": "interactions_pkey",
+          "constraint_type": "PRIMARY KEY"
+        },
+        {
+          "constraint_name": "interactions_source_system_source_record_id_key",
+          "constraint_type": "UNIQUE"
+        }
+      ]
+    },
+    "public.auth_user": {
+      "exists": true,
+      "row_count": 1,
+      "columns": [
+        {
+          "column_name": "id",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "password",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "last_login",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "is_superuser",
+          "data_type": "boolean",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "username",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "first_name",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "last_name",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "email",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "is_staff",
+          "data_type": "boolean",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "is_active",
+          "data_type": "boolean",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "date_joined",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": null
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "2200_24016_10_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24016_11_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24016_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24016_2_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24016_4_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24016_5_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24016_6_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24016_7_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24016_8_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24016_9_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "auth_user_pkey",
+          "constraint_type": "PRIMARY KEY"
+        },
+        {
+          "constraint_name": "auth_user_username_key",
+          "constraint_type": "UNIQUE"
+        }
+      ]
+    },
+    "public.auth_group": {
+      "exists": true,
+      "row_count": 4,
+      "columns": [
+        {
+          "column_name": "id",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "name",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "2200_24002_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24002_2_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "auth_group_pkey",
+          "constraint_type": "PRIMARY KEY"
+        },
+        {
+          "constraint_name": "auth_group_name_key",
+          "constraint_type": "UNIQUE"
+        }
+      ]
+    },
+    "public.auth_user_groups": {
+      "exists": true,
+      "row_count": 1,
+      "columns": [
+        {
+          "column_name": "id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "group_id",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": null
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "2200_24024_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24024_2_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24024_3_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "auth_user_groups_group_id_97559544_fk_auth_group_id",
+          "constraint_type": "FOREIGN KEY"
+        },
+        {
+          "constraint_name": "auth_user_groups_user_id_6a12ed8b_fk_auth_user_id",
+          "constraint_type": "FOREIGN KEY"
+        },
+        {
+          "constraint_name": "auth_user_groups_pkey",
+          "constraint_type": "PRIMARY KEY"
+        },
+        {
+          "constraint_name": "auth_user_groups_user_id_group_id_94350c0c_uniq",
+          "constraint_type": "UNIQUE"
+        }
+      ]
+    },
+    "public.accounts_userprofile": {
+      "exists": true,
+      "row_count": 1,
+      "columns": [
+        {
+          "column_name": "id",
+          "data_type": "bigint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "core_user_id",
+          "data_type": "bigint",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "must_change_password",
+          "data_type": "boolean",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": null
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "2200_24427_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24427_3_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24427_4_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24427_5_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24427_6_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "accounts_userprofile_core_user_id_check",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "accounts_userprofile_user_id_92240672_fk_auth_user_id",
+          "constraint_type": "FOREIGN KEY"
+        },
+        {
+          "constraint_name": "accounts_userprofile_pkey",
+          "constraint_type": "PRIMARY KEY"
+        },
+        {
+          "constraint_name": "accounts_userprofile_core_user_id_key",
+          "constraint_type": "UNIQUE"
+        },
+        {
+          "constraint_name": "accounts_userprofile_user_id_key",
+          "constraint_type": "UNIQUE"
+        }
+      ]
+    },
+    "public.django_admin_log": {
+      "exists": true,
+      "row_count": 0,
+      "columns": [
+        {
+          "column_name": "id",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "action_time",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "object_id",
+          "data_type": "text",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "object_repr",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "action_flag",
+          "data_type": "smallint",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "change_message",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "content_type_id",
+          "data_type": "integer",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": null
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "2200_24088_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24088_2_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24088_4_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24088_5_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24088_6_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24088_8_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "django_admin_log_action_flag_check",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "django_admin_log_content_type_id_c4bce8eb_fk_django_co",
+          "constraint_type": "FOREIGN KEY"
+        },
+        {
+          "constraint_name": "django_admin_log_user_id_c564eba6_fk_auth_user_id",
+          "constraint_type": "FOREIGN KEY"
+        },
+        {
+          "constraint_name": "django_admin_log_pkey",
+          "constraint_type": "PRIMARY KEY"
+        }
+      ]
+    },
+    "public.django_session": {
+      "exists": true,
+      "row_count": 17,
+      "columns": [
+        {
+          "column_name": "session_key",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "session_data",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "expire_date",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": null
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "2200_24116_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24116_2_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24116_3_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "django_session_pkey",
+          "constraint_type": "PRIMARY KEY"
+        }
+      ]
+    },
+    "public.axes_accessattempt": {
+      "exists": true,
+      "row_count": 0,
+      "columns": [
+        {
+          "column_name": "id",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "user_agent",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "ip_address",
+          "data_type": "inet",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "username",
+          "data_type": "character varying",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "http_accept",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "path_info",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "attempt_time",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "get_data",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "post_data",
+          "data_type": "text",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "failures_since_start",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": null
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "2200_24932_10_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24932_11_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24932_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24932_2_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24932_6_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24932_7_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24932_8_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24932_9_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "axes_accessattempt_failures_since_start_check",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "axes_accessattempt_pkey",
+          "constraint_type": "PRIMARY KEY"
+        },
+        {
+          "constraint_name": "axes_accessattempt_username_ip_address_user_agent_8ea22282_uniq",
+          "constraint_type": "UNIQUE"
+        }
+      ]
+    },
+    "public.axes_accesslog": {
+      "exists": true,
+      "row_count": 19,
+      "columns": [
+        {
+          "column_name": "id",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "user_agent",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "ip_address",
+          "data_type": "inet",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "username",
+          "data_type": "character varying",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "http_accept",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "path_info",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "attempt_time",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "logout_time",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "session_hash",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "2200_24941_10_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24941_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24941_2_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24941_6_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24941_7_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24941_8_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "axes_accesslog_pkey",
+          "constraint_type": "PRIMARY KEY"
+        }
+      ]
+    },
+    "public.axes_accessfailurelog": {
+      "exists": true,
+      "row_count": 0,
+      "columns": [
+        {
+          "column_name": "id",
+          "data_type": "integer",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "user_agent",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "ip_address",
+          "data_type": "inet",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "username",
+          "data_type": "character varying",
+          "is_nullable": "YES",
+          "column_default": null
+        },
+        {
+          "column_name": "http_accept",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "path_info",
+          "data_type": "character varying",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "attempt_time",
+          "data_type": "timestamp with time zone",
+          "is_nullable": "NO",
+          "column_default": null
+        },
+        {
+          "column_name": "locked_out",
+          "data_type": "boolean",
+          "is_nullable": "NO",
+          "column_default": null
+        }
+      ],
+      "constraints": [
+        {
+          "constraint_name": "2200_24963_1_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24963_2_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24963_5_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24963_6_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24963_7_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "2200_24963_8_not_null",
+          "constraint_type": "CHECK"
+        },
+        {
+          "constraint_name": "axes_accessfailurelog_pkey",
+          "constraint_type": "PRIMARY KEY"
+        }
+      ]
+    }
+  },
+  "matching_tables": [
+    {
+      "table_schema": "core",
+      "table_name": "roles"
+    },
+    {
+      "table_schema": "core",
+      "table_name": "tenant_users"
+    },
+    {
+      "table_schema": "core",
+      "table_name": "user_role_assignments"
+    },
+    {
+      "table_schema": "core",
+      "table_name": "users"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "accounts_userprofile"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "auth_user"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "auth_user_groups"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "auth_user_user_permissions"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "axes_accessattempt"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "axes_accessattemptexpiration"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "axes_accessfailurelog"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "axes_accesslog"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "django_admin_log"
+    },
+    {
+      "table_schema": "public",
+      "table_name": "django_session"
+    }
+  ],
+  "analysis": {
+    "tenant_distribution": {
+      "ok": true,
+      "rows": [
+        {
+          "status": "ACTIVE",
+          "tenant_count": 2
+        }
+      ]
+    },
+    "core_user_status_distribution": {
+      "ok": true,
+      "rows": [
+        {
+          "account_status": "ACTIVE",
+          "user_count": 1
+        }
+      ]
+    },
+    "role_catalog": {
+      "ok": true,
+      "rows": [
+        {
+          "role_id": 1,
+          "role_code": "SUPERADMIN",
+          "role_name_fa": "سوپرادمین",
+          "is_system_role": true
+        },
+        {
+          "role_id": 2,
+          "role_code": "COMPANY_ADMIN",
+          "role_name_fa": "مدیر شرکت",
+          "is_system_role": true
+        },
+        {
+          "role_id": 3,
+          "role_code": "SENIOR_OPERATOR",
+          "role_name_fa": "اپراتور ارشد",
+          "is_system_role": true
+        },
+        {
+          "role_id": 4,
+          "role_code": "OPERATOR",
+          "role_name_fa": "اپراتور عادی",
+          "is_system_role": true
+        }
+      ]
+    },
+    "tenant_membership_summary": {
+      "ok": true,
+      "rows": []
+    },
+    "role_assignment_summary": {
+      "ok": true,
+      "rows": [
+        {
+          "tenant_id": null,
+          "role_code": "SUPERADMIN",
+          "role_name_fa": "سوپرادمین",
+          "assignment_count": 1
+        }
+      ]
+    },
+    "auth_user_summary": {
+      "ok": true,
+      "rows": [
+        {
+          "auth_users": 1,
+          "active_users": 1,
+          "staff_users": 1,
+          "superusers": 1,
+          "never_logged_in": 0,
+          "first_last_login": "2026-10-03T14:44:41.928760+00:00",
+          "latest_login": "2026-10-03T14:44:41.928760+00:00"
+        }
+      ]
+    },
+    "auth_group_distribution": {
+      "ok": true,
+      "rows": [
+        {
+          "group_name": "COMPANY_ADMIN",
+          "user_count": 0
+        },
+        {
+          "group_name": "OPERATOR",
+          "user_count": 0
+        },
+        {
+          "group_name": "SENIOR_OPERATOR",
+          "user_count": 0
+        },
+        {
+          "group_name": "SUPERADMIN",
+          "user_count": 1
+        }
+      ]
+    },
+    "profile_linkage": {
+      "ok": true,
+      "rows": [
+        {
+          "profiles": 1,
+          "missing_core_user": 0,
+          "must_change_password": 0
+        }
+      ]
+    },
+    "unlinked_auth_users": {
+      "ok": true,
+      "rows": []
+    },
+    "unlinked_core_users": {
+      "ok": true,
+      "rows": []
+    },
+    "session_summary": {
+      "ok": true,
+      "rows": [
+        {
+          "session_count": 17,
+          "active_sessions": 0,
+          "expired_sessions": 17,
+          "earliest_expiry": "2026-09-27T19:24:54.767818+00:00",
+          "latest_expiry": "2026-10-04T01:03:27.635063+00:00"
+        }
+      ]
+    },
+    "admin_log_summary": {
+      "ok": true,
+      "rows": []
+    },
+    "customer_status_audit_summary": {
+      "ok": true,
+      "rows": []
+    },
+    "customer_status_audit_actors": {
+      "ok": true,
+      "rows": []
+    },
+    "interaction_source_summary": {
+      "ok": true,
+      "rows": [
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "کسی جواب نداد",
+          "event_count": 108,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "بله ارسال شد",
+          "event_count": 28,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "ایتا ارسال شد",
+          "event_count": 12,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "واتسپ ارسال شد",
+          "event_count": 12,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "شماره اشتباه بود",
+          "event_count": 8,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "شماره پیدا نشد",
+          "event_count": 8,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "قرارداد دارن",
+          "event_count": 8,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "بله ارسال شد/gmail ارسال شد",
+          "event_count": 8,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "مذاکره اولیه - نیاز به پیگیری مجدد",
+          "event_count": 5,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "با برقاب قرارداد دارن",
+          "event_count": 4,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "پیگیری شود",
+          "event_count": 4,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "فراخوان سایت چک بشه",
+          "event_count": 4,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "با دبیرخانه تماس بگیر",
+          "event_count": 4,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "ایتا یا واتسپ",
+          "event_count": 4,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "روبیکا ارسال شد",
+          "event_count": 4,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "واتسپ ارسال شه",
+          "event_count": 4,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "شماره اشتباه بود-در دستر نبود",
+          "event_count": 4,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "با پست بفرستیم",
+          "event_count": 4,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "قرارداد فصلی دارن",
+          "event_count": 4,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "نمیخواستن",
+          "event_count": 4,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "علاقه مند - تبادل اطلاعات فنی",
+          "event_count": 2,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        },
+        {
+          "tenant_id": 1,
+          "source_system": "MVP",
+          "interaction_status": "عدم پاسخگویی کارخانه",
+          "event_count": 1,
+          "first_created": "2026-09-26T09:12:58.137531+00:00",
+          "latest_created": "2026-09-26T09:12:58.137531+00:00"
+        }
+      ]
+    },
+    "axes_attempt_summary": {
+      "ok": true,
+      "rows": [
+        {
+          "attempt_rows": 0,
+          "recorded_failures": 0,
+          "first_attempt": null,
+          "latest_attempt": null
+        }
+      ]
+    },
+    "axes_access_log_summary": {
+      "ok": true,
+      "rows": [
+        {
+          "session_open": true,
+          "access_count": 17,
+          "first_access": "2026-09-27T11:24:33.254268+00:00",
+          "latest_access": "2026-10-03T14:44:41.910497+00:00"
+        },
+        {
+          "session_open": false,
+          "access_count": 2,
+          "first_access": "2026-09-28T05:35:22.872152+00:00",
+          "latest_access": "2026-09-28T13:12:48.539683+00:00"
+        }
+      ]
+    },
+    "axes_failure_log_summary": {
+      "ok": true,
+      "rows": [
+        {
+          "failure_count": 0,
+          "first_failure": null,
+          "latest_failure": null
+        }
+      ]
+    }
+  }
+}

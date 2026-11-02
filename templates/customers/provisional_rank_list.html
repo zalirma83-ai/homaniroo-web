@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static pagination %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'css/e04-presentation.css' %}?v=1">{% endblock %}
+{% block title %}رتبه‌بندی مشتریان{% endblock %}
+{% block page_eyebrow %}مدیریت مشترکین{% endblock %}
+{% block page_title %}رتبه‌بندی مشتریان بالفعل{% endblock %}
+{% block page_description %}<p class="page-subtitle">بر اساس تعداد رکوردهای قرارداد فروش ثبت‌شده در کل سابقهٔ شرکت فعال؛ نه حجم خرید یا اعتبار قرارداد.</p>{% endblock %}
+{% block content %}
+<section class="panel">
+    <form method="get" class="lead-filter-form active-filter-form">
+        <div class="lead-search"><label for="id_q">جست‌وجوی مشتری</label><input id="id_q" type="search" name="q" value="{{ filters.query }}" placeholder="نام، مسئول انرژی یا شماره تماس"></div>
+        <div><label for="id_rank">رتبه</label><select id="id_rank" name="rank">
+            <option value="">همه</option>
+            <option value="1" {% if filters.rank == '1' %}selected{% endif %}>۱</option>
+            <option value="2" {% if filters.rank == '2' %}selected{% endif %}>۲</option>
+            <option value="3" {% if filters.rank == '3' %}selected{% endif %}>۳</option>
+            <option value="4" {% if filters.rank == '4' %}selected{% endif %}>۴</option>
+            <option value="5" {% if filters.rank == '5' %}selected{% endif %}>۵</option>
+            <option value="unknown" {% if filters.rank == 'unknown' %}selected{% endif %}>اطلاعات ناکافی</option>
+        </select></div>
+        <div class="lead-filter-actions"><button type="submit">اعمال فیلتر</button><a class="button button-secondary" href="{% url 'customers:provisional_rank_list' %}">پاک‌کردن</a></div>
+    </form>
+    <p class="muted">۱ تا ۴ قرارداد به‌ترتیب رتبه ۱ تا ۴؛ پنج قرارداد یا بیشتر رتبه ۵. همه وضعیت‌های ثبت‌شده شمرده می‌شوند. موارد دارای شماره خالی یا تکراری نیازمند بررسی‌اند.</p>
+    <div class="table-wrap"><table class="active-customer-table">
+        <thead><tr><th>نام واحد صنعتی یا شرکت</th><th>قراردادهای فروش ثبت‌شده</th><th>رتبه و بررسی</th><th>عملیات</th></tr></thead>
+        <tbody>{% for customer in page %}<tr>
+            <td><strong>{{ customer.industrial_unit.official_name }}</strong></td>
+            <td>{{ customer.provisional_rank.contract_count|fa_number }}</td>
+            <td>{% include "customers/partials/provisional_rank.html" with rank=customer.provisional_rank compact=True only %}</td>
+            <td><a class="text-link" href="{% url 'customers:customer_profile' customer.tenant_customer_id %}">مشاهده پرونده</a></td>
+        </tr>{% empty %}<tr><td colspan="4" class="empty-state">مشتری مطابق فیلتر انتخاب‌شده پیدا نشد.</td></tr>{% endfor %}</tbody>
+    </table></div>
+    {% numbered_pagination page %}
+</section>
+{% endblock %}

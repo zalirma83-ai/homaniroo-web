@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}مشخصات همکار{% endblock %}
+{% block page_eyebrow %}همکاران شرکت فعال{% endblock %}
+{% block page_title %}{{ partner.display_name }}{% endblock %}
+{% block page_actions %}<a class="button button-secondary" href="{% url 'customers:partner_list' %}">بازگشت به همکاران</a>{% if partner.customer_id %}<a class="button button-secondary" href="{% url 'customers:customer_profile' partner.customer_id %}">پرونده موجود مشتری</a>{% endif %}{% endblock %}
+{% block content %}
+{% include "partials/ownership_editor.html" with unit=partner.industrial_unit ownership=partner.ownership %}
+<section class="panel"><div class="profile-section-heading"><h2>مشخصات تجاری</h2><span class="badge badge-info">همکار تأییدشده</span></div>
+<dl class="customer-info-list">
+<div><dt>نام ثبت‌شده همکار</dt><dd>{{ partner.display_name }}</dd></div>
+<div><dt>نام رسمی واحد یا شرکت</dt><dd>{{ partner.industrial_unit.official_name }}</dd></div>
+<div><dt>شناسه ملی ارائه‌شده (بدون اعتبارسنجی)</dt><dd dir="ltr">{{ partner.provided_national_id|default:"—" }}</dd></div>
+<div><dt>شناسه ملی در اطلاعات پایه</dt><dd dir="ltr">{{ partner.industrial_unit.national_id|default:"—" }}</dd></div>
+<div><dt>نشانی ثبت‌شده</dt><dd>{{ partner.industrial_unit.address|default:"ثبت نشده" }}</dd></div>
+</dl></section>
+<section id="operator-note" class="panel">
+    <div class="profile-section-heading"><h2>یادداشت همکار</h2></div>
+    {% if can_edit_note %}
+    <form method="post" action="{% url 'customers:partner_note_update' partner.profile_id %}">
+        {% csrf_token %}
+        {{ note_form.non_field_errors }}
+        {{ note_form.version }}{{ note_form.version.errors }}
+        <div class="form-field"><label for="{{ note_form.body.id_for_label }}">متن یادداشت</label>{{ note_form.body }}{{ note_form.body.errors }}</div>
+        <p class="muted">یادداشت در همین شرکت ذخیره می‌شود. برای پاک‌کردن، متن را خالی و ذخیره کنید.</p>
+        <button type="submit">ذخیره یادداشت</button>
+    </form>
+    {% else %}
+    <div>{{ operator_note.body|linebreaksbr }}</div>
+    {% endif %}
+    {% if operator_note %}<p class="muted">آخرین ویرایش: {{ operator_note.updated_at|jalali_datetime }}{% if operator_note.updated_by_name %} — {{ operator_note.updated_by_name }}{% endif %}</p>{% endif %}
+</section>
+{% endblock %}

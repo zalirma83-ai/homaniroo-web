@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% block title %}حذف شرکت{% endblock %}
+{% block page_title %}حذف شرکت{% endblock %}
+{% block content %}<div class="result-card result-danger"><span class="result-icon">!</span><h2>آیا از حذف «{{ tenant.display_name }}» مطمئن هستید؟</h2><p>شرکت دارای اطلاعات وابسته حذف نمی‌شود. این عملیات برای شرکت بدون داده قابل بازگشت نیست.</p><div class="form-actions form-actions-center"><form method="post">{% csrf_token %}<button class="button button-danger" type="submit">تأیید حذف</button></form><a class="button button-secondary" href="{% url 'tenants:list' %}">انصراف</a></div></div>{% endblock %}

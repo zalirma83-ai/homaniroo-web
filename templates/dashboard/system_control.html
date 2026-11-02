@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}کنترل سامانه{% endblock %}
+{% block page_eyebrow %}مدیریت مرکزی{% endblock %}
+{% block page_title %}کنترل سامانه{% endblock %}
+{% block page_description %}<p class="page-subtitle">مدیریت ساختار شرکت‌ها، کاربران و دسترسی‌های سامانه</p>{% endblock %}
+{% block content %}
+<div class="management-grid">
+    <a class="management-card" href="{% url 'tenants:list' %}"><span class="management-icon">▦</span><span><strong>مدیریت شرکت‌ها</strong><small>ایجاد، ویرایش و کنترل وضعیت شرکت‌ها</small></span><span>←</span></a>
+    <a class="management-card" href="{% url 'tenants:user_list' %}"><span class="management-icon">♙</span><span><strong>کاربران شرکت‌ها</strong><small>ساخت حساب و تخصیص نقش و شرکت</small></span><span>←</span></a>
+    <a class="management-card" href="{% url 'auditlog:center' %}"><span class="management-icon">◉</span><span><strong>ممیزی و امنیت</strong><small>مشاهده فعالیت کاربران، ورودها و رویدادهای امنیتی</small></span><span>←</span></a>
+    <a class="management-card" href="{% url 'admin:index' %}"><span class="management-icon">⚙</span><span><strong>مدیریت فنی Django</strong><small>دسترسی به پنل فنی برای امور ضروری</small></span><span>←</span></a>
+</div>
+<div class="notice-box"><strong>محدوده دسترسی سوپرادمین</strong><p>این صفحه فقط برای مدیریت کل سامانه قابل مشاهده است. تغییرات کاربران و شرکت‌ها با دقت انجام شود.</p></div>
+{% endblock %}

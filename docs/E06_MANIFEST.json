@@ -1,0 +1,125 @@
+{
+  "step": "E06",
+  "baseline_head": "a23b99e56e25986c04d8573afac6403c10c0663a",
+  "source_install_only": true,
+  "database_migration": "customers.0007_partnernote",
+  "migration_execution": "Separate approved step after verified fresh backup; installer never connects to a database.",
+  "schema_evidence": "homaniroo_E06_schema_20261027_215118_295102.json",
+  "files": {
+    "customers/models.py": {
+      "before_sha256": "733394718df1c441439dea372de87ceecd551ea473dd0a298a54a6ff3c49ea27",
+      "after_sha256": "0fd42806d75603c79886f5a19ed5508c39af9239213b8500b22449096b3a3f06"
+    },
+    "customers/business_views.py": {
+      "before_sha256": "263b200b9c227c1352b2729d153a2ab0fb7ebbb2775d604507467e5db86319cf",
+      "after_sha256": "394b88ade16046c8e5fbd6dde4ad0f0eccaadff7bcf26efe42a7a4abdc0e7748"
+    },
+    "customers/urls.py": {
+      "before_sha256": "a2203599b1ea1a6dc0d5c180e62c791f596e5a2b621eaa4a67c167a6128d6f75",
+      "after_sha256": "45a2efa7961ae502734a495561f7d173fae75002227ffccbf7f03c8d839d74f5"
+    },
+    "customers/partner_notes.py": {
+      "before_sha256": null,
+      "after_sha256": "07a4a913a64d0b12acbf1b11384bb525a93a2223dcabb015f2d6ba8d8949388a"
+    },
+    "customers/partner_note_forms.py": {
+      "before_sha256": null,
+      "after_sha256": "39792f29daa200c3b40b01210f1165ca6f911057f794df1b3d9c3ab7f2257a83"
+    },
+    "customers/migrations/0007_partnernote.py": {
+      "before_sha256": null,
+      "after_sha256": "2d6c63c77da188821351203a65b582255dd6058f57e7ae8981f88d81f3a6cf77"
+    },
+    "customers/test_partner_notes.py": {
+      "before_sha256": null,
+      "after_sha256": "d7244f890aed0099e0adce773650811c17821fcf514bb48b7264c2f099bb77e9"
+    },
+    "common/test_e06_partner_note_ui.py": {
+      "before_sha256": null,
+      "after_sha256": "80afe319a271e3db7ecaa7ed55db6d868c4a852063757de18559a11cac9c4444"
+    },
+    "templates/customers/partner_detail.html": {
+      "before_sha256": "28b27d8ade2148c3593a3e6fbcf89f4bf230735c664b72791aa485b6edb8ca9f",
+      "after_sha256": "f1704dec71f81ca82b5637a566aaf07f8c77dae2b2fc21bef74782cf8f173471"
+    },
+    "docs/E06_README_FA.md": {
+      "before_sha256": null,
+      "after_sha256": "c963bc67d88c2f20c6d39473d7e7741346235c0f8d15b2053cb0eb8216dace57"
+    }
+  },
+  "protected": {
+    "accounts/models.py": "c455ed6644a4e8a6bf14d9c879598c6563305ad34a01752242f3419ff381e01e",
+    "auditlog/models.py": "dc132b973d6b1608f16842df5ba7520355b4c7a1946c9b85bcd49cb38aede6cb",
+    "common/date_filters.py": "eb81b114ff08d0c5ac4c7962cf9bbb647684608185c525652d1b2cfe8217bd20",
+    "common/information_status.py": "ffc986b385680a3e4d381016455c6ba1f026b1593d38cf71705b6dbdabcca059",
+    "common/models.py": "563734a765db00f804e87c9317abe597df00e1e0e103902f690aac738910f404",
+    "common/querysets.py": "190b53e05fc4044722103b2cc2bb42f9dea9d28da1426f2adbdb80afdf451669",
+    "common/tenant_access.py": "6b01e54102ed6b82df5cc2c589d4fe2efeaf0a1c510aa52c7229782e587d6376",
+    "config/settings.py": "4ff9bb875b89c10f26403895058403de88ef1b4bfde46c807494aa7d70a2cfc4",
+    "contracts/models.py": "9419b9a1a381982b83960b23a4fa62d376be0a91a77496571a843d2287475053",
+    "contracts/services.py": "3c1454435f7db55d58a558924051985f6fc78c4faf482b5f44fa263e4032636c",
+    "customers/business_services.py": "74949ba97d80e53c00fa880dfb352d95fe10f78806f302c6a82e4a349c07249d",
+    "customers/migrations/0001_initial.py": "f8a866b7f2205dc899256606422e98e8fe9bbb5e8eeb62921def9a0d65767437",
+    "customers/migrations/0002_customercontact_industrialunit.py": "3106a584a208a66697517137aaf662764fda4236646504f8f93f6a89eade5ea3",
+    "customers/migrations/0003_customer_status_history.py": "36c9086f5e9c3c13cb73cfde3e822470e9c2d3c6bbf90d346c2f91d35f9f945a",
+    "customers/migrations/0004_customer_profile_models.py": "8537acc2a832d0d904a7e1eb5c58c41e6e855706709fe7cd61d0ca43df3ad3af",
+    "customers/migrations/0005_entitybusinessprofile.py": "c6c537433daf2ba53aacc67d81f8197ab59684e79708d4682139bdd5cd24d3c0",
+    "customers/migrations/0006_entityownershipchange_entityownership.py": "c4aad3e94c6a2265c0a6fd8145e573a3ec1bd79a1b9ae82a6910392e86e85dae",
+    "customers/migrations/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "customers/ownership.py": "86d73bd897fc322ee6945d4914625dc31cf90d60aedd7edf7291dcd395e96187",
+    "customers/services.py": "bf2c13281d098069f1c951db2848bbd23be92fa11256526d2b1b03ed5a012536",
+    "dashboard/models.py": "563734a765db00f804e87c9317abe597df00e1e0e103902f690aac738910f404",
+    "dashboard/services.py": "904e8b74a80c77291ffd61b98ff03893bd78c234e12a8c7ad6c893f2db82f5a7",
+    "energy/models.py": "1b2d1fcbd53e1e6799756c4629eaf07d8d8452053f0e262b61dbd1d161e787ff",
+    "energy/services.py": "8cbc1fa83257d77ff8baf035602d26b1a262783c1843437117c867089e6d8278",
+    "interactions/alert_services.py": "a42f85da8e9c9e4b26d50193484c12de44b3d10516d9e83c4891bba693aa512a",
+    "interactions/models.py": "17736a60207c80e908904ae1008b42c2fa7212e5b38c3506c572e54fe7c58ca7",
+    "reports/models.py": "563734a765db00f804e87c9317abe597df00e1e0e103902f690aac738910f404",
+    "reports/services.py": "3885b424417a415e2ac4f752bdea842a36f4607dbd9ce6231a9225765fc9af30",
+    "requirements.txt": "9e4abcf605947844d78bc4557f4d2f85440ddad983969de5dca552823ce5b4eb",
+    "static/css/app.css": "4aa938e127cb1ea50c431707845f1d252bccec2ab49478e94c1907c1a2cec63a",
+    "static/css/jalali-picker.css": "bf4152e1836148174649e2cea5034dbb342dc770bb2ac496db891a77f8b08b06",
+    "static/css/pagination.css": "0904d4d10f2a32b4f87410dd3b76cb46de9b434fc490d6af668d51a32d82b2c6",
+    "static/css/shell-step1.css": "e8d10e4a17dbb16e683420f893852c341be4fb1dd514c24aa0e1204135286cac",
+    "static/js/app.js": "c6342ef716fac110aaf914e7f7ecb4d7f8949a8124aec55e1bfe59665dee7182",
+    "static/js/jalali-picker.js": "b82e3a84650224f3c01c67a0e00a21d08ec4674aeccc98c997db6d0b82b4551d",
+    "templates/base.html": "63d022dfe99eb2c1791a3af414385d2610bea820a4ae3fb7d09498aa1637c89a",
+    "templates/energy/trading_dashboard.html": "9484ae07bcaf5b334aaa5107c828aad1e8049c63d1c87bea1eb05e9bb0e05e60",
+    "templates/interactions/alert_center.html": "96b594f9c253985668a8516ac63230f7f4a257a294816f1ba69d56d06438417c",
+    "templates/interactions/work_queue.html": "ab04b3cb0944b8d00f4704902db701cedc711cab74f5c77e941538c81903b2e4",
+    "templates/partials/business_cycle_filter.html": "c01bf981493ac98f823040283a2ccdc3042e30be029e16d5fcbaaa9a0dc2cf25",
+    "templates/partials/information_badges.html": "11315a40c88cb412b930a8d67270a1417efb4bd050b826103c4cef7d387bdb84",
+    "templates/partials/information_details.html": "2d9a7388a586011c77b051c9e1ad5f55ab42eb509f98149af4b42119001d6c6e",
+    "templates/partials/ownership_editor.html": "3abeeb1e9d517d1e358c040c81093f6606efe21a6f91ad38da68e14bec744a98",
+    "templates/partials/ownership_filter.html": "8bf4a928eb9425a443730de4936d9baa4b66ee860c26b9a2f6a11b99837afdea",
+    "tenants/models.py": "2b3a31870e8da1f672e8c698f2ac687207e36f8e569b72d1832eab2d25780569",
+    "common/templatetags/pagination.py": "c685f10ddede3b6782e8b316a46e99fedad9f9b71d0aac99260cde758590361d",
+    "common/test_e04_presentation.py": "2c6124b4a1b6438c04ad8e68f9f25689db33d61d372b89190a31b082bb757fed",
+    "common/test_information_status.py": "385f8a7494d880f3966529aa3b622f0a167dc2dbc4aa7466b55a25720d67c4b3",
+    "common/test_presentation_cleanup.py": "8fa1d7da77c47cad8ac9a45028beb659fbb9135d94c84034003e9ce6bbc18680",
+    "contracts/views.py": "29703c2868726980d0f7f112015b40036380520ca3e55361921774c4e5c64d94",
+    "customers/views.py": "6acf11b3f0fb4ff0e25a9a75cef5ce8112464d67090380a7a59a936d66ccc4e5",
+    "docs/E04_README_FA.md": "181f66e496278c66d0a3b8e1313876d25969c157055d37b51a52a4e09e95c602",
+    "static/css/e04-presentation.css": "384a197d046fd99b0e21db18e8cf84fc841dbd58c08fcb55f41aeb3fe582d295",
+    "templates/contracts/contract_detail.html": "fca0c1782f1101a69df0d19ff12f8607ae223179270179619a9478d71a080ea1",
+    "templates/contracts/contract_list.html": "232a1fe69a99546b2aea24d549976ce0de581318c948979ba41d8445bc276977",
+    "templates/customers/active_detail.html": "f1f970d51492e890681d8d78fb9f673a9dbd3fa162b2785613bda43395e0832d",
+    "templates/customers/active_list.html": "3e7d346f2024368b42fdc4c8a79c0584367391b4fb66589e236299c04de3add2",
+    "templates/customers/customer_profile.html": "467fdef90e4d2fa7e22905dc26b15a77a0c0a765dfa380c7874123b8b4638f4e",
+    "templates/customers/prospective_detail.html": "809526589cb232d325e1b69bda859db64a0820ae52d229013d2d7dd2653226b0",
+    "templates/customers/prospective_list.html": "88d7e644188dfe2519250899a75aa210a6083ae01ee4955168f7b87e9c31a644",
+    "templates/dashboard/home.html": "9416d0af519321c53ffcbd0bb9d97701afc40e04b9c8d5894516666fd59a6ba8",
+    "templates/reports/report_center.html": "6e75686bce51657a87ea28aafa964edc3eed7e71adf9da71b9f6823d862b3ab4",
+    "docs/E04_MANIFEST.json": "8700b78342351c8a3e07b71871c38f74f4f3d7c679aaaeaab3cfee37f24d639d",
+    "common/test_rate_unit_display.py": "a6600d3f1030ff5d3c2768e3d38d1d61aa5cf80dea84b30eb3567a9c7a49daa6",
+    "templates/customers/partner_list.html": "e5fae267fb56417b1fae19858816904fcc9facc02ff99493fbc7722145400a12",
+    "common/test_e05_partner_notice.py": "1961fcf7069c8b1ccda8c587fa4fc2f8407621e7125f91bba876f27a433e7d55",
+    "accounts/access.py": "7ef3d26d68ed5fffe4f5fcf42250749851d16a3dc9c38ac87355cc81bc05151e",
+    "tenants/services.py": "4f4289272478a51003e741d809e5a66118f167294ff2a2c8a9d016d73f93c719",
+    "tenants/middleware.py": "47c62043e0b5704587391fdbb1757d7577de50951690581c15e559c7471fb6c0",
+    "auditlog/services.py": "e5b3c0bcf742073d38bcd7167fdf327bb0e31443d15c18d16048d841bd006608",
+    "auditlog/middleware.py": "f0d99cca60651944977f3801b2deede221f12ab5ea260f5fb1e6ad98084b6859",
+    "templates/partials/messages.html": "2944ae372801f0124f45583225c6e6b4d79cde3e1fb0ae3624f82d540a4ca79b"
+  },
+  "note": "Self-checksum omitted; the installer payload verifies this manifest."
+}

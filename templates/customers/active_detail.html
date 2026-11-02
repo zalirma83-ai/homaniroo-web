@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'css/e04-presentation.css' %}?v=1">{% endblock %}
+{% block title %}پرونده مشترک فعال{% endblock %}
+{% block page_eyebrow %}مشترکین فعال{% endblock %}
+{% block page_title %}{{ customer.industrial_unit.official_name }}{% endblock %}
+{% block page_description %}<p class="page-subtitle">پرونده مشترک فعال و قراردادهای فروش ثبت‌شده</p>{% endblock %}
+{% block page_actions %}<a class="button button-secondary" href="{% url 'customers:active_list' %}">بازگشت به فهرست</a><a class="button button-primary" href="{% url 'customers:customer_profile' customer.tenant_customer_id %}">پرونده کامل</a>{% if request|has_tenant_roles:"COMPANY_ADMIN" %}<a class="button button-danger" href="{% url 'customers:mark_dormant' customer.tenant_customer_id %}">انتقال به راکد</a>{% endif %}{% endblock %}
+{% block content %}
+{% include "partials/ownership_editor.html" with unit=customer.industrial_unit ownership=customer.ownership %}
+<p>{% include "partials/business_badge.html" with customer=customer only %}</p>
+{% include "customers/partials/provisional_rank.html" with rank=customer.provisional_rank only %}
+
+<section class="active-detail-overview">
+    <article class="panel"><div class="panel-header"><div><p class="section-kicker">اطلاعات مشترک</p><h2>مشخصات پرونده</h2></div></div>
+        <dl class="customer-info-list"><div><dt>نام واحد صنعتی یا شرکت</dt><dd>{{ customer.industrial_unit.official_name }}</dd></div><div><dt>شناسه پرونده</dt><dd>{{ customer.tenant_customer_id|fa_number }}</dd></div><div><dt>شناسه ملی</dt><dd>{{ customer.industrial_unit.national_id|default:"—" }}</dd></div><div><dt>کد اقتصادی</dt><dd>{{ customer.industrial_unit.economic_code|default:"—" }}</dd></div><div><dt>کد پستی</dt><dd>{{ customer.industrial_unit.postal_code|default:"—" }}</dd></div><div class="customer-info-wide"><dt>نشانی</dt><dd>{{ customer.industrial_unit.address|default:"—" }}</dd></div></dl>
+    </article>
+    <article class="panel"><div class="panel-header"><div><p class="section-kicker">راه‌های ارتباطی</p><h2>اطلاعات تماس</h2></div></div><div class="contact-list">{% for contact in contacts %}<article class="contact-card"><div><strong>{{ contact.contact_person|default:"مسئول انرژی ثبت نشده" }}</strong>{% if contact.is_primary %}<span class="badge badge-success">اصلی</span>{% endif %}</div><dl><div><dt>همراه</dt><dd dir="ltr">{{ contact.mobile_number|default:"—" }}</dd></div><div><dt>تلفن</dt><dd dir="ltr">{{ contact.phone_number|default:"—" }}</dd></div><div><dt>ایمیل</dt><dd dir="ltr">{{ contact.email|default:"—" }}</dd></div><div><dt>وب‌سایت</dt><dd dir="ltr">{{ contact.website|default:"—" }}</dd></div></dl></article>{% empty %}<p class="panel-empty">اطلاعات تماسی برای این مشترک ثبت نشده است.</p>{% endfor %}</div></article>
+</section>
+<section class="active-contract-metrics e04-summary-three">
+    <article><span>قرارداد فروش متصل</span><strong>{{ contract_data.contract_count|fa_number }}</strong></article>
+    <article><span>ردیف دارای حجم</span><strong>{{ contract_data.known_volume_lines|fa_number }}</strong></article>
+    <article><span>ردیف دارای مبلغ</span><strong>{{ contract_data.known_amount_lines|fa_number }}</strong></article>
+</section>
+
+<section class="active-contract-list">
+{% for contract in contract_data.rows %}
+<article class="panel active-contract-card">
+    <header class="active-contract-header"><div><p class="section-kicker">قرارداد فروش</p><h2>{{ contract.display_number }}</h2></div><span class="badge {% if contract.lifecycle_label == 'تاریخ نامشخص' %}badge-muted{% else %}{{ contract.lifecycle_class }}{% endif %}">{{ contract.lifecycle_label }}</span></header>
+    <dl class="contract-meta"><div><dt>شروع قرارداد</dt><dd>{{ contract.start_display|default:"—"|fa_number }}</dd></div><div><dt>پایان قرارداد</dt><dd>{{ contract.end_display|default:"—"|fa_number }}</dd></div><div><dt>نوع معامله</dt><dd>{% if contract.item.transaction_type == 'BILATERAL' %}دوجانبه{% elif contract.item.transaction_type == 'EXCHANGE_FORWARD_PHYSICAL' %}بورس انرژی ـ سلف فیزیکی{% else %}نامشخص{% endif %}</dd></div></dl>
+    <div class="table-wrap"><table class="contract-line-table"><thead><tr><th>نوع برق</th><th>بازه بار</th><th>حجم قرارداد</th><th>نرخ ثبت‌شده</th><th>مبلغ</th><th>وضعیت واحدها</th></tr></thead><tbody>{% for line in contract.lines %}<tr><td>{{ line.item.energy_type.energy_type_name_fa|ui_label }}</td><td>{{ line.item.load_band.load_band_name_fa }}</td><td>{% if line.item.contracted_volume is not None %}<strong>{{ line.item.contracted_volume|floatformat:"-6g"|fa_number }}</strong> {{ line.item.volume_unit }}{% else %}<span class="muted">ثبت نشده</span>{% endif %}</td><td>{% include "partials/rate_value.html" with rate_value=line.rate_value only %}</td><td>{% if line.item.amount_value is not None %}{{ line.item.amount_value|floatformat:"-6g"|fa_number }}{% if line.item.amount_unit != 'UNKNOWN' %} {{ line.item.amount_unit }}{% else %} <small class="muted">واحد نامشخص</small>{% endif %}{% else %}<span class="muted">ثبت نشده</span>{% endif %}</td><td><span class="badge badge-muted">واحد ثبت‌شده: {{ line.item.volume_unit|default:"نامشخص" }}</span></td></tr>{% if line.monthly_quantities %}<tr class="monthly-row"><td colspan="6"><details><summary>مقادیر ماهانه ({{ line.monthly_quantities|length|fa_number }} دوره)</summary><div class="monthly-quantity-grid">{% for quantity in line.monthly_quantities %}<span><b>{{ quantity.period_jalali|fa_number }}</b><small>{{ quantity.quantity_value|floatformat:"-6g"|fa_number }} {{ quantity.quantity_unit }}</small></span>{% endfor %}</div></details></td></tr>{% endif %}{% empty %}<tr><td colspan="6" class="empty-state">ردیف انرژی برای این قرارداد ثبت نشده است.</td></tr>{% endfor %}</tbody></table></div>
+</article>
+{% empty %}<section class="panel"><p class="panel-empty">قرارداد فروشی برای این مشترک ثبت نشده است.</p></section>{% endfor %}
+</section>
+{% endblock %}

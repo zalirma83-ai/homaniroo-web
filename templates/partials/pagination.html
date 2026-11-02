@@ -1,0 +1,27 @@
+{% if show_pagination %}
+<nav class="pagination pagination-numbered" aria-label="{{ pagination_label|default:'صفحه‌بندی' }}">
+    <span class="pagination-info">صفحه {{ page_number|fa_number }} از {{ total_pages|fa_number }}</span>
+    <div class="pagination-pages">
+        {% if first_url %}<a class="button button-secondary pagination-link" href="{{ first_url }}" aria-label="صفحه اول">اول</a>{% endif %}
+        {% if previous_url %}<a class="button button-secondary pagination-link" href="{{ previous_url }}" rel="prev" aria-label="صفحه قبلی">قبلی</a>{% endif %}
+        {% for link in page_links %}
+            {% if link.is_gap %}
+                <span class="pagination-gap" aria-hidden="true">…</span>
+            {% elif link.is_current %}
+                <span class="button button-secondary pagination-link is-current" aria-current="page" aria-label="صفحه {{ link.number|fa_number }}، صفحه فعلی">{{ link.number|fa_number }}</span>
+            {% else %}
+                <a class="button button-secondary pagination-link" href="{{ link.url }}" aria-label="صفحه {{ link.number|fa_number }}">{{ link.number|fa_number }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if next_url %}<a class="button button-secondary pagination-link" href="{{ next_url }}" rel="next" aria-label="صفحه بعدی">بعدی</a>{% endif %}
+        {% if last_url %}<a class="button button-secondary pagination-link" href="{{ last_url }}" aria-label="صفحه آخر">آخر</a>{% endif %}
+    </div>
+    <form method="get" action="{{ pagination_path }}" class="pagination-jump">
+        {% for name, value in hidden_filters %}<input type="hidden" name="{{ name }}" value="{{ value }}">{% endfor %}
+        <label class="pagination-jump-label">رفتن به صفحه
+            <input type="number" name="{{ page_parameter|default:'page' }}" value="{{ page_number }}" min="1" max="{{ total_pages }}" step="1" required aria-label="شماره صفحه موردنظر" inputmode="numeric" dir="ltr">
+        </label>
+        <button type="submit" class="button button-secondary">برو</button>
+    </form>
+</nav>
+{% endif %}

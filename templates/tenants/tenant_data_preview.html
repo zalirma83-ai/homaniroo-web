@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}کنترل جداسازی اطلاعات{% endblock %}
+{% block page_eyebrow %}کنترل Multi-Tenant{% endblock %}
+{% block page_title %}اطلاعات شرکت {{ request.tenant.display_name }}{% endblock %}
+{% block page_description %}<p class="page-subtitle">تمام شاخص‌های زیر فقط از رکوردهای شرکت فعال محاسبه شده‌اند.</p>{% endblock %}
+{% block page_actions %}{% endblock %}
+{% block content %}<section class="metric-grid metric-grid-four"><article class="metric-card"><div class="metric-icon">♙</div><div><span class="metric-label">مشتریان</span><strong class="metric-value">{{ customer_count }}</strong></div></article><article class="metric-card"><div class="metric-icon">▤</div><div><span class="metric-label">قراردادها</span><strong class="metric-value">{{ contract_count }}</strong></div></article><article class="metric-card"><div class="metric-icon">↗</div><div><span class="metric-label">فروش‌ها</span><strong class="metric-value">{{ sale_count }}</strong></div></article><article class="metric-card"><div class="metric-icon">↙</div><div><span class="metric-label">خریدها</span><strong class="metric-value">{{ purchase_count }}</strong></div></article></section><div class="notice-box notice-success"><strong>جداسازی اطلاعات فعال است</strong><p>این شمارش‌ها با QuerySet محدودشده به شرکت «{{ request.tenant.display_name }}» استخراج شده‌اند.</p></div>{% endblock %}

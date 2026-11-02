@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}مدیریت نشست‌ها{% endblock %}
+{% block page_eyebrow %}امنیت حساب{% endblock %}
+{% block page_title %}مدیریت نشست‌ها{% endblock %}
+{% block page_description %}<p class="page-subtitle">نشست فعلی و سایر ورودهای فعال حساب خود را کنترل کنید.</p>{% endblock %}
+{% block content %}
+<section class="panel">
+    <div class="table-wrap"><table><thead><tr><th>شناسه امن</th><th>زمان انقضا</th><th>وضعیت</th></tr></thead><tbody>
+    {% for session in sessions %}<tr><td><code>{{ session.reference }}</code></td><td>{{ session.expire_date|jalali_datetime }}</td><td>{% if session.is_current %}<span class="badge badge-success">نشست فعلی</span>{% else %}<span class="badge badge-muted">نشست دیگر</span>{% endif %}</td></tr>
+    {% empty %}<tr><td colspan="3" class="empty-state">نشست فعالی پیدا نشد.</td></tr>{% endfor %}
+    </tbody></table></div>
+    <div class="form-actions">
+        <form method="post" action="{% url 'accounts:logout_other_sessions' %}">{% csrf_token %}<button type="submit" class="button button-secondary">خروج از سایر نشست‌ها</button></form>
+        <form method="post" action="{% url 'accounts:logout_all_sessions' %}">{% csrf_token %}<button type="submit" class="button button-danger">خروج از همه نشست‌ها</button></form>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}ورود موقتاً مسدود شد{% endblock %}
+{% block auth_content %}<div class="standalone-result"><div class="result-card result-warning"><span class="result-icon">!</span><h1>ورود موقتاً مسدود شد</h1><p>تعداد تلاش‌های ناموفق از حد مجاز عبور کرده است. پس از پایان زمان انتظار دوباره تلاش کنید.</p><a class="button button-secondary" href="{% url 'accounts:login' %}">بازگشت به صفحه ورود</a></div></div>{% endblock %}
